@@ -1,12 +1,12 @@
 // passwordConfig.js
 
 // Passwortschutz aktivieren/deaktivieren
-const enablePasswordProtection = true;  // true = aktiv, false = inaktiv
+const enablePasswordProtection = false;  // true = aktiv, false = inaktiv
 
 // Der SHA-256 Hash des richtigen Passworts (Beispiel)
 const correctPasswordHash = "c6637ffab46701f1f145156dafcd21176a85a95c0f5ab71eecb03d15899efd05";
 
-// Funktion zum Ändern des Passworts (z. B. für Admins)
+// Funktion zum Ã„ndern des Passworts (z. B. fÃ¼r Admins)
 function changePassword(newPassword) {
     const hashBuffer = sha256(newPassword);  // SHA-256 Hash berechnen
     const hashArray = Array.from(new Uint8Array(hashBuffer));
