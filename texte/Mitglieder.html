@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<head>
+         <title>Mitglieder ADWFC</title>
+         <meta name="author" content="&Eacute;mile Jeremias Ruff">
+         <link rel="icon" type="image/png" href="../favicon.ico">
+
+         <link rel="stylesheet" href="../stylesheet.css" type="text/css">
+         <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+         <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <style>
+          #passwordForm, #protectedContent {
+          display: none; /* Beide Abschnitte standardm&auml;&szlig;ig ausblenden */
+          }
+         </style>
+</head>
+
+<body>
+
+    <!-- Passwortabfrage Formular -->
+    <div id="passwordForm">
+        <h2>Seite im Bau</h2>
+        <img src="../bilder/lego-construction.jpeg" class="lego-construction">
+        <p class="passwordForm-eins">Politische Ungeheuerlichkeiten, fatale Fehler im Code oder doch eher ein Beauty-Update? <br> In jedem Fall braucht es noch ein weinig Zeit,
+        in sp&auml;testens ein paar Tagen ist die Seite dann wieder erreichbar. <br> Wir bitten um Entschuldigung.</p>
+        <p class="passwordForm-zwei">Sonderinspektor auf Fahndung nach DIN EN ISO/IEC 27001 (Informationssicherheitsmanagementsysteme)? Dann sei krass und best&auml;tige mit deinem Parallel
+        Interconnection Nexus (PIN):</p>
+        <input type="number" id="passwordInput" placeholder="PIN" required>
+        <button class="h&auml;kchen" onclick="checkPassword()">&#10004;</button>
+    </div>
+
+    <geschuetzt id="protectedContent">
+    <!--             Ende geschützter Inhalt           -->
+
+
+
+   <header class="header-container">                                                      <!-- main-nav -->
+<!----><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf">
+
+<!----><div class="main-nav">
+          <h1 class="allgemeiner-deutscher">Allgemeiner Deutscher Wanderer und Fahrradfahrer Club &#x1F474; &#x1F97E;</h1>
+          <!--h1 class="allgemeiner-deutscher">ADWFC &#x1F474; &#x1F97E;</h1-->
+          <p class="internetauftritt">- Internetauftritt der WaFas</p>
+          <ul>
+              <li><a href="../index.html">Homepage</a></li>
+              <li><b>|</b></li>
+              <li><a href="Mitglieder.html">Mitglieder</a></li>
+              <li><b>|</b></li>
+              <li><a href="Kontakt.html">Kontakt</a></li>
+          </ul>
+      </div>
+
+<!----><nav class="springe-zu">                                                             <!-- Springe zu -->
+          <ul class="springe-links">
+              <li>Springe zu:</li>
+              <li><a href="#Mitglieder">Mitglieder</a></li>
+          </ul>
+          <ul class="springe-rechts">
+          </ul>
+      </nav>
+   </header>
+
+
+   <main>
+        <h3 id="Mitglieder" class="abstandh3">Mitglieder (VM_Vorstandsmitglied; GM_Gr&uuml;ndungsmitglied; MaZ_Mitglied auf Zeit; M_Mitglied)*</h3>          <!-- Mitglieder -->
+
+        <table width="400px" border="0" cellpadding="0" cellspacing="2">
+         <tr>    <td>&#x1F6B4; Jerry, "G&uuml;nther"</td>
+                 <td>/ GM/ VM/ Legislative</td>
+         </tr>
+         <tr>    <td>&#x1F422; Maren &#x2764; ;), "Frank"</td>
+                 <td>/ GM/ Legislative</td>
+         </tr>
+         <tr>    <td>&#x1FA93; [...] &#x2764; ;), "Sabine"</td>
+                 <td>/ GM/ Exekutive</td>
+         </tr>
+         <tr>    <td>&#x1F913; [...], "Paulus"</td>
+                 <td>/ M/ Judikative</td>
+         </tr>
+         <tr>    <td>&#x26F8; [...] , "Gertrude"</td>
+                 <td>/ M/ Judikative</td>
+         </tr>
+         <tr>    <td>&#x1F431; [...], "Gundula"</td>
+                 <td>/ M/ Judikative</td>
+         </tr>
+        </table>
+
+        <br>
+        <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index.html#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
+
+   </main>
+
+   <footer>
+         <hr size="1" noshade>
+         <p >&copy; 2025 by &Eacute;mile Jeremias Ruff</p>
+   </footer>
+
+   </geschuetzt>
+   <!--             Ende geschützter Inhalt           -->
+
+
+<script>
+    const correctPasswordHash = "c6637ffab46701f1f145156dafcd21176a85a95c0f5ab71eecb03d15899efd05";  // Beispiel SHA-256 Hash des richtigen Passworts
+    const enablePasswordProtection = false;  // Setze dies auf `false`, um den Passwortschutz auszuschalten
+
+    function autoLogout() {
+        setTimeout(function() {
+            sessionStorage.removeItem('loggedIn');
+            document.getElementById('protectedContent').style.display = 'none';
+            document.getElementById('passwordForm').style.display = 'block';
+            alert("LOL - automatische Abmeldung nach 20min - Technikgott (auf keinen Fall aus'm Internet geklaut ;)");
+        }, 1200000); // 1200000 Millisekunden = 20 Minuten
+    }
+
+    async function checkPassword() {
+        const enteredPassword = document.getElementById("passwordInput").value;
+
+        // Passwort-Hash berechnen
+        const hashBuffer = await sha256(enteredPassword);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const enteredPasswordHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+        if (enteredPasswordHash === correctPasswordHash) {
+            document.getElementById("passwordForm").style.display = "none";
+            document.getElementById("protectedContent").style.display = "block";
+            sessionStorage.setItem('loggedIn', 'true');
+            autoLogout(); // Startet den automatischen Logout-Timer
+        } else {
+            alert("Falsches Passwort!");
+        }
+    }
+
+    async function sha256(message) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(message);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        return hashBuffer;
+    }
+
+    window.onload = function() {
+        // Wenn Passwortschutz deaktiviert ist, zeige den Inhalt ohne Passwortabfrage
+        if (!enablePasswordProtection) {
+            document.getElementById('protectedContent').style.display = 'block';  // Geschützten Inhalt direkt anzeigen
+            document.getElementById('passwordForm').style.display = 'none';  // Passwortformular ausblenden
+        } else {
+            // Überprüfen, ob der Benutzer eingeloggt ist
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                document.getElementById('protectedContent').style.display = 'block'; // Zeigt den geschützten Inhalt
+                document.getElementById('passwordForm').style.display = 'none'; // Versteckt das Passwortformular
+                autoLogout(); // Startet den Logout-Timer, wenn der Benutzer eingeloggt ist
+            } else {
+                document.getElementById('passwordForm').style.display = 'block'; // Zeigt das Passwortformular
+                document.getElementById('protectedContent').style.display = 'none'; // Versteckt den geschützten Inhalt
+            }
+        }
+
+        // Event-Listener für die Enter-Taste
+        document.getElementById("passwordInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();  // Führt die Passwortüberprüfung beim Drücken der Enter-Taste aus
+            }
+        });
+    };
+</script>
+</body>
+</html>
