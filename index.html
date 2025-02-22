@@ -27,7 +27,7 @@
         <p class="passwordForm-zwei">Sonderinspektor auf Fahndung nach DIN EN ISO/IEC 27001 (Informationssicherheitsmanagementsysteme)? Dann sei krass und best&auml;tige mit deinem Parallel
         Interconnection Nexus (PIN):</p>
         <input type="number" id="passwordInput" placeholder="PIN" required>
-        <button class="h&auml;kchen" onclick="checkPassword()">&#10004;</button>
+        <button class="haekchen" onclick="checkPassword()">&#10004;</button>
     </div>
 
     <geschuetzt id="protectedContent">
@@ -36,7 +36,7 @@
 
 
     <div id="cookieBanner">
-         <p>Unsere Cookies bleiben sch&ouml;n bei uns! &#127850; <br><br> Deshalb finden sich auch keine auf dieser Website, es werden jediglich Logins f&uuml;r 20min <br> im Session Storage
+         <p>Unsere Cookies bleiben sch&ouml;n bei uns! &#127850; <br><br> Deshalb finden sich auch keine auf dieser Website, es werden jediglich Logins f&uuml;r 20min im Session Storage
          gespeichert sowie die Bildschrimbreite ermittelt. &#128190;&#128274;</p>
          <button onclick="hideCookieBanner()">Top &#128591;</button>
     </div>
@@ -139,11 +139,11 @@
 
 
 
-         <h3 id="Regelungen" class="abstandh3">Regelungen (Reg)</h3>              <!-- Regelungen -->
+         <h3 id="Regelungen" class="zwischentitel">Regelungen (Reg)</h3>              <!-- Regelungen -->
 
 
 <!---->  <p class="abstand-reg"><b>&sect;1 Externe Inhalte</b><br>
-                 <span class="einzug">Bei der Vermittlung von Inhalten des Internets (Zitieren, direktes Einbetten in Whatsabb, Watsabb URLsHyperlinks)
+                 <span class="ex-inhalte">Bei der Vermittlung von Inhalten des Internets (Zitieren, direktes Einbetten in Whatsabb, Watsabb URLsHyperlinks)
                  ist die Einhaltung folgender Beschr&auml;nkungen zu beachten. <br> Das Urteil liegt in Einzelf&auml;llen im Ermessen der Judikative. <br>
                  <ol>    <li>a) eigenserstellte Inhalte: keine Beschr&auml;nkungen<br>
                              b) Sprachnachichten: max. f&uuml;nf Minuten pro Woche</li>
@@ -184,7 +184,7 @@
 
 
 
-        <h3 id="Mitgliedertitel" class="abstandh3">Mitgliedertitel</h3>            <!-- Mitgliedertitel -->
+        <h3 id="Mitgliedertitel" class="zwischentitel">Mitgliedertitel</h3>            <!-- Mitgliedertitel -->
 
         <p><b>1. Vorstand (V)</b>
                  <ul>     <li>Admin Status in Whatsabb</li>
@@ -206,7 +206,7 @@
 
 
 
-        <h3 id="Strafma&szlig;nahmen" class="abstandh3">Strafma&szlig;nahmen (Sm)</h3>          <!-- Strafmaßnahmen -->
+        <h3 id="Strafma&szlig;nahmen" class="zwischentitel">Strafma&szlig;nahmen (Sm)</h3>          <!-- Strafmaßnahmen -->
 
         <p><ol>  <li>k&ouml;rperliche Z&uuml;chtigung durch Exekutive
                          <ul>    <li>normale M betreffend: bei leichten Vergehen leicher Schulterknuff</li>
@@ -223,7 +223,7 @@
 
 
 
-        <h3 id="Erg&auml;nzungen" class="abstandh3">Erg&auml;nzungen (Erg&auml;)</h3>              <!-- Ergänzungen -->
+        <h3 id="Erg&auml;nzungen" class="zwischentitel">Erg&auml;nzungen (Erg&auml;)</h3>              <!-- Ergänzungen -->
 
         <p><ol>  <li><b>Backen</b>
                  <span class="nomargintop" class="einzug"><br>
@@ -249,7 +249,7 @@
 
 
 
-        <h3 id="Zuk&uuml;nftiges" class="abstandh3">Zuk&uuml;nftiges</h3>          <!-- Zukünftiges -->
+        <h3 id="Zuk&uuml;nftiges" class="zwischentitel">Zuk&uuml;nftiges</h3>          <!-- Zukünftiges -->
 
         <p>(Instagram-Account?), eigene Memes, Maskottchen, Pr&auml;ambel, Flagge/Logo, Erkennungszeichen/-wortlaut/-handzeichen, Antrag an EU/Gurkistan, Abzeichen </p>
         <p>Medienempfehlung: <br> zum H&ouml;ren: Chaosradio (CCC), MDR Kultur (MDR), Fritz (rbb)</p>
@@ -287,39 +287,77 @@
    </geschuetzt>
    <!--             Ende geschützter Inhalt           -->
 
-    <!-- JavaScript, um das Passwort zu prüfen und das Modul zu importieren -->
-    <script type="module">
-        // Importiere die Konfigurationswerte
-        import { enablePasswordProtection, correctPasswordHash, changePassword } from './passwordConfig.js';
+<script>
+    const correctPasswordHash = "fe7c8b93142029fafe356ee9b2dd09766e6f266141c0c1340b262fc633c16e10";  // Beispiel SHA-256 Hash des richtigen Passworts
+    const enablePasswordProtection = true;  // Setze dies auf `false`, um den Passwortschutz auszuschalten
 
-        // Warten bis die Seite vollständig geladen ist
-        window.onload = function() {
-            console.log("Module geladen:", enablePasswordProtection, correctPasswordHash);
+    function autoLogout() {
+        setTimeout(function() {
+            sessionStorage.removeItem('loggedIn');
+            document.getElementById('protectedContent').style.display = 'none';
+            document.getElementById('passwordForm').style.display = 'block';
+            alert("LOL - automatische Abmeldung nach 20min - Technikgott (auf keinen Fall aus'm Internet geklaut ;)");
+        }, 1200000); // 1200000 Millisekunden = 20 Minuten
+    }
 
-            // Wenn Passwortschutz aktiviert ist, zeige das Passwortformular an
-            if (enablePasswordProtection) {
-                document.getElementById('passwordForm').style.display = 'block';
-                document.getElementById('protectedContent').style.display = 'none';
+    async function checkPassword() {
+        const enteredPassword = document.getElementById("passwordInput").value;
+
+        // Passwort-Hash berechnen
+        const hashBuffer = await sha256(enteredPassword);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const enteredPasswordHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+        if (enteredPasswordHash === correctPasswordHash) {
+            document.getElementById("passwordForm").style.display = "none";
+            document.getElementById("protectedContent").style.display = "block";
+            sessionStorage.setItem('loggedIn', 'true');
+            autoLogout(); // Startet den automatischen Logout-Timer
+        } else {
+            alert("Falsches Passwort!");
+        }
+    }
+
+    async function sha256(message) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(message);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        return hashBuffer;
+    }
+
+    window.onload = function() {
+        // Wenn Passwortschutz deaktiviert ist, zeige den Inhalt ohne Passwortabfrage
+        if (!enablePasswordProtection) {
+            document.getElementById('protectedContent').style.display = 'block';  // Geschützten Inhalt direkt anzeigen
+            document.getElementById('passwordForm').style.display = 'none';  // Passwortformular ausblenden
+        } else {
+            // Überprüfen, ob der Benutzer eingeloggt ist
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                document.getElementById('protectedContent').style.display = 'block'; // Zeigt den geschützten Inhalt
+                document.getElementById('passwordForm').style.display = 'none'; // Versteckt das Passwortformular
+                autoLogout(); // Startet den Logout-Timer, wenn der Benutzer eingeloggt ist
             } else {
-                document.getElementById('protectedContent').style.display = 'block';
-                document.getElementById('passwordForm').style.display = 'none';
-            }
-        };
-
-        // Passwortüberprüfung
-        function checkPassword() {
-            const enteredPassword = document.getElementById('passwordInput').value;
-
-            // Überprüfen, ob das eingegebene Passwort korrekt ist
-            if (enteredPassword === correctPasswordHash) {
-                // Wenn Passwort korrekt ist, zeige den geschützten Inhalt
-                document.getElementById('passwordForm').style.display = 'none';
-                document.getElementById('protectedContent').style.display = 'block';
-            } else {
-                alert("Falsches Passwort!");
+                document.getElementById('passwordForm').style.display = 'block'; // Zeigt das Passwortformular
+                document.getElementById('protectedContent').style.display = 'none'; // Versteckt den geschützten Inhalt
             }
         }
-    </script>
+
+        // Event-Listener für die Enter-Taste
+        document.getElementById("passwordInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();  // Führt die Passwortüberprüfung beim Drücken der Enter-Taste aus
+            }
+        });
+    };
+
+    function hideCookieBanner() {
+        document.getElementById("cookieBanner").style.opacity = "0";
+        setTimeout(() => document.getElementById("cookieBanner").style.display = "none", 1000);
+    }
+
+    // Banner nach 30 Sekunden automatisch ausblenden
+    setTimeout(hideCookieBanner, 30000);
+</script>
 </body>
 
 </html>

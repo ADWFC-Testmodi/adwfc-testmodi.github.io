@@ -1,163 +1,3 @@
-#cookieBanner {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 1;
-    transition: opacity 1s ease-in-out;
-}
-
-#cookieBanner button {
-    background: #ffd700;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 5px;
-}
-                                                 /**Passwort-Form**/
-.lego-construction {
-    width: auto;
-    height: 400px;
-}
-
-
-.passwordForm-eins {
-   font-size: 18px;
-}
-
-.passwordForm-zwei {
-   font-size: 1em;
-   margin-top: 50px;
-}
-
-.häkchen {
-   color: green;
-   border: 0;
-   background-color: white;
-}
-
-.häkchen:hover {
-   color: white;
-   background-color: green;
-   border-radius: 10px;
-
-}
-
-#passwordInput {
-    width: 100%; /* Setzt die Breite des Eingabefeldes auf 100% des Containers */
-    max-width: 300px; /* Maximale Breite, um es nicht zu groß zu machen */
-    padding: 12px 15px; /* Größeres Innenpolster */
-    font-size: 18px; /* Größere Schrift */
-    border: 2px solid transparent; /* Transparenter Standardrand */
-    border-radius: 5px; /* Abgerundete Ecken */
-    box-sizing: border-box; /* sorgt dafür, dass Padding und Border in der Gesamtbreite enthalten sind */
-}
-
-#passwordInput:hover {
-    border: 2px dashed transparent; /* Transparenter Rand */
-    border-radius: 5px;
-    border-image: linear-gradient(45deg, orange 12.5%, white 12.5%, white 25%, orange 25%, orange 37.5%, white 37.5%, white 50%, orange 50%, orange 62.5%, white 62.5%, white 75%, orange 75%, orange) 1; /* Feineres Wechselmuster */
-    outline: none; /* Kein Standardfokusrahmen */
-    box-shadow: 0 0 5px orange; /* Etwas mehr Leuchten beim Fokussieren */
-    border-right: 3px solid #ff4500; /* Farbiger Rand rechts (kräftiges Orange) */
-}
-
-#passwordInput:focus {
-    border: 2px dashed transparent; /* Transparenter Rand */
-    border-radius: 5px;
-    border-image: linear-gradient(45deg, orange 12.5%, white 12.5%, white 25%, orange 25%, orange 37.5%, white 37.5%, white 50%, orange 50%, orange 62.5%, white 62.5%, white 75%, orange 75%, orange) 1; /* Feineres Wechselmuster */
-    outline: none; /* Kein Standardfokusrahmen */
-    box-shadow: 0 0 5px orange; /* Etwas mehr Leuchten beim Fokussieren */
-    border-right: 3px solid #ff4500; /* Farbiger Rand rechts (kräftiges Orange) */
-}
-
-                                                 /***main-nav***/
-.main-nav {
-    margin-left: 30px;
-    text-align: left;
-}
-
-.main-nav li {
-    display: inline-block;
-    margin-left: 10px;
-}
-
-.main-nav a {
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px;
-    border-radius: 5px;
-    position: relative;
-    transition: transform 0.4s ease-out;
-}
-
-.main-nav a:hover::after {
-    transform: scaleX(1);
-}
-
-
-.main-nav a::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #000;
-    transform: scaleX(0);
-    transform-origin: bottom left;
-    transition: transform 0.4s ease-out;
-}
-
-.springe-zu {                                    /***springe-zu***/
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    z-index: 1000;
-    border-left: 1px dashed #11113A;
-    border-bottom: 1px dashed #11113A;
-    border-top: 1px dashed #11113A;
-}
-
-.springe-zu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.springe-zu ul li {
-    margin: 0px 0;
-}
-
-.springe-zu a {
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-    display: block;
-    padding: 8px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    position: relative;
-}
-
-.springe-zu a:hover {
-    background-color: #ddd;
-}
-
-
-
 body {
     margin-top: 100px;
     text-align: left;
@@ -165,7 +5,7 @@ body {
     box-sizing: border-box;
 }
 
-.header-container {
+header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -204,7 +44,6 @@ body {
     margin-top: 70px;
 }
 
-
 main {
     margin-left: 100px;
     margin-top: 100px;
@@ -223,7 +62,118 @@ h2 {
     text-align: center;
 }
 
-                                                 /***unten***/
+
+/* ================
+    Passwort-Form
+   ================ */
+
+.lego-construction {
+    width: auto;
+    height: 400px;
+}
+
+.passwordForm-eins {
+    font-size: 18px;
+}
+
+.passwordForm-zwei {
+    font-size: 1em;
+    margin-top: 50px;
+}
+
+#passwordForm {
+    text-align: center;
+    font-family: 'Lora', serif;
+}
+
+#passwordInput {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 15px;
+    font-size: 18px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#passwordInput:hover {
+    border: 2px dashed transparent;
+    border-radius: 5px;
+    border-image: linear-gradient(45deg, orange 12.5%, white 12.5%, white 25%, orange 25%, orange 37.5%, white 37.5%, white 50%, orange 50%, orange 62.5%, white 62.5%, white 75%, orange 75%, orange) 1;
+    outline: none;
+    box-shadow: 0 0 5px orange;
+    border-right: 3px solid #ff4500;
+}
+
+#passwordInput:focus {
+    border: 2px dashed transparent;
+    border-radius: 5px;
+    border-image: linear-gradient(45deg, orange 12.5%, white 12.5%, white 25%, orange 25%, orange 37.5%, white 37.5%, white 50%, orange 50%, orange 62.5%, white 62.5%, white 75%, orange 75%, orange) 1;
+    outline: none;
+    box-shadow: 0 0 5px orange;
+    border-right: 3px solid #ff4500;
+}
+
+.haekchen {
+    color: green;
+    font-size: 25px;
+    width: 50px;
+    border: 0;
+    background-color: white;
+}
+
+.haekchen:hover {
+    color: white;
+    background-color: green;
+    border-radius: 45px;
+}
+
+
+/* ================
+       main-nav
+   ================ */
+.main-nav {
+    margin-left: 30px;
+    text-align: left;
+}
+
+.main-nav li {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.main-nav a {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 5px;
+    position: relative;
+    transition: transform 0.4s ease-out;
+}
+
+.main-nav a:hover::after {
+    transform: scaleX(1);
+}
+
+.main-nav a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #000;
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.4s ease-out;
+}
+
+
+/* ================
+    Scroll-Button
+   ================ */
 #scrollToTopBtn {
     position: fixed;
     bottom: 20px;
@@ -236,65 +186,93 @@ h2 {
     font-size: 20px;
     cursor: pointer;
     display: none;
-    z-index: 1000;
+    z-index: 2;
 }
 
 #scrollToTopBtn:hover {
     background-color: #0056b3;
 }
 
-.bau {
-    text-align: center;
-    margin-top: 50px;
+
+/* ================
+      Springe-zu
+   ================ */
+.springe-zu {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1;
+    border-left: 1px dashed #11113A;
+    border-bottom: 1px dashed #11113A;
+    border-top: 1px dashed #11113A;
 }
 
-.QuellStrich {
-    width: 30%;
-    align: left;
-    margin-top: 80px;
-}
-
-.Quellen {
-    text-align: center;
+.springe-zu ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.springe-zu ul li {
+    margin: 0px 0;
+}
+
+.springe-zu a {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.springe-zu a:hover {
+    background-color: #ddd;
 }
 
 
-.para-liste {
-  list-style: none;
-  counter-reset: paragraph-counter;
-  margin-left: 0px; /* Linker Abstand für die gesamte Liste */
-  padding: 0;
+/* ================
+       Cookies
+   ================ */
+#cookieBanner {
+    position: fixed;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+    z-index: 3;
 }
 
-.para-liste > li {
-  counter-increment: paragraph-counter;
-  position: relative;
-  padding-left: 2em; /* Platz für das §-Symbol */
+#cookieBanner button {
+    background: #ffd700;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
 }
 
-.para-liste > li::before {
-  content: "§" counter(paragraph-counter) " ";
-  position: absolute;
-  left: 0;
-}
 
-.para-liste ul {
-  list-style-type: disc; /* Bullet Points */
-  margin-left: -0.5em; /* Einrückung */
-  padding-left: 0; /* Verhindert doppeltes Padding */
-}
-
-.para-liste ul li {
-  padding-left: 0.5em; /* Leichter Abstand zum Bullet Point */
-}
-
-                                                 /***mobile Version***/
-/***mobile Version***/
+/* ================
+        Mobil
+   ================ */
 @media (max-width: 768px) {
     .main-nav ul {
-        display: block; /* Listenelemente als Block-Elemente */
-        text-align: center; /* Links zentrieren */
+        display: block;
+        text-align: center;
         padding: 0;
         margin-top: 30px;
         margin-left: 15px !important;
@@ -311,53 +289,53 @@ h2 {
         margin-left: 20px;
     }
 
-
     .header-container {
-        flex-direction: column; /* Stellt sicher, dass Bild und Text untereinander angeordnet werden */
+        flex-direction: column;
         height: 200px !important;
-        margin-top: 30px;
+        margin-top: 25px;
     }
 
     .internetauftritt {
-       font-size: 20px !important;
-       margin-top: 5px !important;
-       margin-left: 20px !important;
+        font-size: 20px !important;
+        margin-top: 5px !important;
+        margin-left: 20px !important;
     }
 
     .kopf {
-    width: auto;
-    height: 225px;
-    margin-left: 40px;
+        margin-left: 50px;
+        width: auto;
+        height: 225px;
     }
 
     .konstitution {
-    margin-top: 450px;
-    margin-bottom: 25px;
-    text-align: center;
+        margin-top: 450px;
+        margin-bottom: 25px;
+        text-align: center;
     }
 
     .header-container {
-    padding: 0;
+        padding: 0;
+        text-align: center;
     }
 
     body {
-    margin-top: 0px;
+        margin-top: 0px;
+        padding-bottom: 100px;
     }
 
-
-   .springe-zu {
-        display: flex;                      /* Flexbox für bessere Kontrolle */
-        justify-content: space-between;      /* Nebeneinander */
-        align-items: flex-start;             /* Linksbündige Ausrichtung */
+    .springe-zu {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
         width: 100%;
         background-color: #fff;
         padding: 10px 20px;
         border-bottom: 1px dashed #11113A;
         border-top: 1px dashed #11113A;
         box-sizing: border-box;
-        position: relative !important;       /* Überschreibt evtl. position: fixed */
+        position: relative !important;
         left: 50px;
-        right: 50px;                       /* Korrigiert die Verschiebung */
+        right: 50px;
         top: 20px;
     }
 
@@ -369,7 +347,7 @@ h2 {
         list-style: none;
         padding: 0;
         margin: 0;
-        flex: 1;                             /* Beide Listen nehmen gleich viel Platz ein */
+        flex: 1;
     }
 
     .springe-zu ul li {
@@ -390,61 +368,61 @@ h2 {
         background-color: #ddd;
     }
 
-main ul, ol {
-    margin-left:40px;
-}
-
-main li {
-    margin-top: 0.5em;
-}
-
-main p {
-    margin-top: 0.5em;
-}
-
-main {
-   margin-left: 40px;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    main ul, ol {
+        margin-left: 40px;
     }
 
-.lego-construction {
-    width: 80% !important;
-    height: auto !important;
-}
+    main li {
+        margin-top: 0.5em;
+    }
 
-#passwordForm {
-    font-size: 14px;
-    margin-top: 50px;
-    margin-left: 30px;
-    margin-right: 30px !important;
-    text-align: center;
-    font-family: 'Lora', serif;
-}
+    main p {
+        margin-top: 0.5em;
+    }
 
-#passwordInput {
-   margin-top: 20px;
-}
+    main {
+        margin-left: 40px;
+    }
 
-.abstandh3 {
-   margin-top: 50px;
-}
+    .lego-construction {
+        width: 80% !important;
+        height: auto !important;
+    }
 
-.abstand-reg {
-   margin-top: 20px;
-}
+    #passwordForm {
+        font-size: 14px;
+        margin-top: 50px;
+        margin-left: 30px;
+        margin-right: 30px !important;
+        text-align: center;
+        font-family: 'Lora', serif;
+    }
 
-.abstand-nm li {
-  margin-top: 0px;
-}
+    #passwordInput {
+        margin-top: 20px;
+        width: 70%;
+    }
 
-.konstitution {
-   margin-top: 400px;
-}
+    .haekchen {
+        font-size: 15px;
+        width: 30px;
+    }
+
+    .abstandh3 {
+        margin-top: 50px;
+    }
+
+    .abstand-reg {
+        margin-top: 20px;
+    }
+
+    .abstand-nm li {
+        margin-top: 0px;
+    }
+
+    .konstitution {
+        margin-top: 400px;
+    }
 
     #cookieBanner {
         width: 90%;
@@ -458,5 +436,4 @@ main {
         width: 100%;
         margin-top: 5px;
     }
-
 }
