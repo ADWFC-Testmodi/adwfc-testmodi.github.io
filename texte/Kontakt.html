@@ -4,14 +4,15 @@
          <meta name="author" content="&Eacute;mile Jeremias Ruff">
          <link rel="icon" type="image/png" href="../favicon.ico">
 
-         <link rel="stylesheet" href="../stylesheet.css" type="text/css">
+         <link rel="stylesheet" href="../stylesheet.css?v=<?= filemtime('style.css'); ?" type="text/css">
          <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
          <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+         <script src="../script.js"></script>
          <style>
           #passwordForm, #protectedContent {
-          display: none; /* Beide Abschnitte standardm&auml;&szlig;ig ausblenden */
+                display: none;
           }
          </style>
 </head>
@@ -31,16 +32,16 @@
     </div>
 
     <geschuetzt id="protectedContent">
-    <!--             Anfang geschützter Inhalt           -->
+    <!--             Anfang geschÃ¼tzter Inhalt           -->
 
 
    <header class="header-container">                                                      <!-- main-nav -->
-<!----><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf">
-
+<!----><button onclick="toggleDarkMode()"><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf"></button>    
+       
 <!----><div class="main-nav">
           <h1 class="allgemeiner-deutscher">Allgemeiner Deutscher Wanderer und Fahrradfahrer Club &#x1F474; &#x1F97E;</h1>
           <!--h1 class="allgemeiner-deutscher">ADWFC &#x1F474; &#x1F97E;</h1-->
-          <p class="internetauftritt">- Internetauftritt der WaFas</p>
+          <p class="internetauftritt">- Internetauftritt der<a href="../auth.html">WaFas</a></p>
           <ul>
               <li><a href="../index.html">Homepage</a></li>
               <li><b>|</b></li>
@@ -61,7 +62,7 @@
 
     <main>
 
-         <p class="abstandh3">Folgend unser Kontaktformular. Dieses ist alternativ auch <a href="https://tally.so/r/npkVG8">hier</a> zu erreichen. <br>
+         <p id="kontakt">Folgend unser Kontaktformular. Dieses ist alternativ auch <a href="https://tally.so/r/npkVG8">hier</a> zu erreichen. <br>
          Das Formular wird von <i>Tally</i> zu Verf&uuml;gung gestellt, einem externen Dritten. Bitte beachten Sie, dass dieser <b>ebenfalls Zugriff</b> auf die Daten hast, die Sie uns hier &uuml;bermitteln.<br>
          F&uuml;r vertrauliche Informationen k&ouml;nnen Sie uns im Anliegen-Feld auch einfach bitten, unabh&auml;ngig per Mail kontaktiert zu werden.</p>
 
@@ -80,72 +81,8 @@
          <p >&copy; 2025 by &Eacute;mile Jeremias Ruff</p>
    </footer>
 
-   <!--             Ende geschützter Inhalt           -->
+   <!--             Ende geschÃ¼tzter Inhalt           -->
    </geschuetzt>
 
-
-<script>
-    const correctPasswordHash = "c6637ffab46701f1f145156dafcd21176a85a95c0f5ab71eecb03d15899efd05";  // Beispiel SHA-256 Hash des richtigen Passworts
-    const enablePasswordProtection = false;  // Setze dies auf `false`, um den Passwortschutz auszuschalten
-
-    function autoLogout() {
-        setTimeout(function() {
-            sessionStorage.removeItem('loggedIn');
-            document.getElementById('protectedContent').style.display = 'none';
-            document.getElementById('passwordForm').style.display = 'block';
-            alert("LOL - automatische Abmeldung nach 20min - Technikgott (auf keinen Fall aus'm Internet geklaut ;)");
-        }, 1200000); // 1200000 Millisekunden = 20 Minuten
-    }
-
-    async function checkPassword() {
-        const enteredPassword = document.getElementById("passwordInput").value;
-
-        // Passwort-Hash berechnen
-        const hashBuffer = await sha256(enteredPassword);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const enteredPasswordHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-
-        if (enteredPasswordHash === correctPasswordHash) {
-            document.getElementById("passwordForm").style.display = "none";
-            document.getElementById("protectedContent").style.display = "block";
-            sessionStorage.setItem('loggedIn', 'true');
-            autoLogout(); // Startet den automatischen Logout-Timer
-        } else {
-            alert("Falsches Passwort!");
-        }
-    }
-
-    async function sha256(message) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(message);
-        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-        return hashBuffer;
-    }
-
-    window.onload = function() {
-        // Wenn Passwortschutz deaktiviert ist, zeige den Inhalt ohne Passwortabfrage
-        if (!enablePasswordProtection) {
-            document.getElementById('protectedContent').style.display = 'block';  // Geschützten Inhalt direkt anzeigen
-            document.getElementById('passwordForm').style.display = 'none';  // Passwortformular ausblenden
-        } else {
-            // Überprüfen, ob der Benutzer eingeloggt ist
-            if (sessionStorage.getItem('loggedIn') === 'true') {
-                document.getElementById('protectedContent').style.display = 'block'; // Zeigt den geschützten Inhalt
-                document.getElementById('passwordForm').style.display = 'none'; // Versteckt das Passwortformular
-                autoLogout(); // Startet den Logout-Timer, wenn der Benutzer eingeloggt ist
-            } else {
-                document.getElementById('passwordForm').style.display = 'block'; // Zeigt das Passwortformular
-                document.getElementById('protectedContent').style.display = 'none'; // Versteckt den geschützten Inhalt
-            }
-        }
-
-        // Event-Listener für die Enter-Taste
-        document.getElementById("passwordInput").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();  // Führt die Passwortüberprüfung beim Drücken der Enter-Taste aus
-            }
-        });
-    };
-</script>
 </body>
 </html>

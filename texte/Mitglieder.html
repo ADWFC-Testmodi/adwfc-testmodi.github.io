@@ -4,14 +4,15 @@
          <meta name="author" content="&Eacute;mile Jeremias Ruff">
          <link rel="icon" type="image/png" href="../favicon.ico">
 
-         <link rel="stylesheet" href="../stylesheet.css" type="text/css">
+         <link rel="stylesheet" href="../stylesheet.css?v=<?= filemtime('style.css'); ?" type="text/css">
          <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
          <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+         <script src="../script.js"></script>
          <style>
           #passwordForm, #protectedContent {
-          display: none; /* Beide Abschnitte standardm&auml;&szlig;ig ausblenden */
+                display: none;
           }
          </style>
 </head>
@@ -31,17 +32,17 @@
     </div>
 
     <geschuetzt id="protectedContent">
-    <!--             Ende geschützter Inhalt           -->
+    <!--             Anfang geschÃ¼tzter Inhalt           -->
 
 
 
    <header class="header-container">                                                      <!-- main-nav -->
-<!----><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf">
-
+<!----><button onclick="toggleDarkMode()"><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf"></button>    
+       
 <!----><div class="main-nav">
           <h1 class="allgemeiner-deutscher">Allgemeiner Deutscher Wanderer und Fahrradfahrer Club &#x1F474; &#x1F97E;</h1>
           <!--h1 class="allgemeiner-deutscher">ADWFC &#x1F474; &#x1F97E;</h1-->
-          <p class="internetauftritt">- Internetauftritt der WaFas</p>
+          <p class="internetauftritt">- Internetauftritt der<a href="../auth.html">WaFas</a></p>
           <ul>
               <li><a href="../index.html">Homepage</a></li>
               <li><b>|</b></li>
@@ -63,29 +64,53 @@
 
 
    <main>
-        <h3 id="Mitglieder" class="abstandh3">Mitglieder (VM_Vorstandsmitglied; GM_Gr&uuml;ndungsmitglied; MaZ_Mitglied auf Zeit; M_Mitglied)*</h3>          <!-- Mitglieder -->
+        <h3 id="mitglieder">Mitglieder*</h3>          <!-- Mitglieder -->
 
-        <table width="400px" border="0" cellpadding="0" cellspacing="2">
+   <div class="mitglieder-container">     
+        <table width="500" border="0" cellpadding="0" cellspacing="2">
          <tr>    <td>&#x1F6B4; Jerry, "G&uuml;nther"</td>
-                 <td>/ GM/ VM/ Legislative</td>
-         </tr>
+                 <td>/ VM</td>
+                 <td>/ GM</td>
+                 <td>/ Legislative</td></tr>
+         
          <tr>    <td>&#x1F422; Maren &#x2764; ;), "Frank"</td>
-                 <td>/ GM/ Legislative</td>
-         </tr>
+                 <td>/ GM</td>
+                 <td>/ Legislative</td></tr>
+        
          <tr>    <td>&#x1FA93; [...] &#x2764; ;), "Sabine"</td>
-                 <td>/ GM/ Exekutive</td>
-         </tr>
+                 <td>/ GM</td>
+                 <td>/ Exekutive</td></tr>
+         
          <tr>    <td>&#x1F913; [...], "Paulus"</td>
-                 <td>/ M/ Judikative</td>
-         </tr>
+                 <td>/ M</td>
+                 <td>/ Judikative</td></tr>
+        
          <tr>    <td>&#x26F8; [...] , "Gertrude"</td>
-                 <td>/ M/ Judikative</td>
-         </tr>
+                 <td>/ M</td>
+                 <td>/ Judikative</td></tr>
+        
          <tr>    <td>&#x1F431; [...], "Gundula"</td>
-                 <td>/ M/ Judikative</td>
-         </tr>
+                 <td>/ M</td>
+                 <td>/ Judikative</td></tr>
+       
         </table>
 
+        <div class="vertikale-linie"></div>
+
+        <p><table>
+            <tr><td>M</td>
+                <td>= &nbsp; Mitglied</td></tr>
+            <tr><td>VM</td>
+                <td>= &nbsp; Vorstandsmitglied</td></tr>
+            <tr><td>GM</td>
+                <td>= &nbsp; Gr&uuml;ndungsmitglied</td></tr>
+            <tr><td>MaZ</td>
+                <td>= &nbsp; Mitglied auf Zeit</td></tr>
+            <tr><td>OtM</td>
+                <td>= &nbsp; One-time-Mitglied</td></tr>
+        </table></p>
+    </div>
+            
         <br>
         <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index.html#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
 
@@ -97,71 +122,7 @@
    </footer>
 
    </geschuetzt>
-   <!--             Ende geschützter Inhalt           -->
+   <!--             Ende geschÃ¼tzter Inhalt           -->
 
-
-<script>
-    const correctPasswordHash = "c6637ffab46701f1f145156dafcd21176a85a95c0f5ab71eecb03d15899efd05";  // Beispiel SHA-256 Hash des richtigen Passworts
-    const enablePasswordProtection = false;  // Setze dies auf `false`, um den Passwortschutz auszuschalten
-
-    function autoLogout() {
-        setTimeout(function() {
-            sessionStorage.removeItem('loggedIn');
-            document.getElementById('protectedContent').style.display = 'none';
-            document.getElementById('passwordForm').style.display = 'block';
-            alert("LOL - automatische Abmeldung nach 20min - Technikgott (auf keinen Fall aus'm Internet geklaut ;)");
-        }, 1200000); // 1200000 Millisekunden = 20 Minuten
-    }
-
-    async function checkPassword() {
-        const enteredPassword = document.getElementById("passwordInput").value;
-
-        // Passwort-Hash berechnen
-        const hashBuffer = await sha256(enteredPassword);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const enteredPasswordHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-
-        if (enteredPasswordHash === correctPasswordHash) {
-            document.getElementById("passwordForm").style.display = "none";
-            document.getElementById("protectedContent").style.display = "block";
-            sessionStorage.setItem('loggedIn', 'true');
-            autoLogout(); // Startet den automatischen Logout-Timer
-        } else {
-            alert("Falsches Passwort!");
-        }
-    }
-
-    async function sha256(message) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(message);
-        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-        return hashBuffer;
-    }
-
-    window.onload = function() {
-        // Wenn Passwortschutz deaktiviert ist, zeige den Inhalt ohne Passwortabfrage
-        if (!enablePasswordProtection) {
-            document.getElementById('protectedContent').style.display = 'block';  // Geschützten Inhalt direkt anzeigen
-            document.getElementById('passwordForm').style.display = 'none';  // Passwortformular ausblenden
-        } else {
-            // Überprüfen, ob der Benutzer eingeloggt ist
-            if (sessionStorage.getItem('loggedIn') === 'true') {
-                document.getElementById('protectedContent').style.display = 'block'; // Zeigt den geschützten Inhalt
-                document.getElementById('passwordForm').style.display = 'none'; // Versteckt das Passwortformular
-                autoLogout(); // Startet den Logout-Timer, wenn der Benutzer eingeloggt ist
-            } else {
-                document.getElementById('passwordForm').style.display = 'block'; // Zeigt das Passwortformular
-                document.getElementById('protectedContent').style.display = 'none'; // Versteckt den geschützten Inhalt
-            }
-        }
-
-        // Event-Listener für die Enter-Taste
-        document.getElementById("passwordInput").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();  // Führt die Passwortüberprüfung beim Drücken der Enter-Taste aus
-            }
-        });
-    };
-</script>
 </body>
 </html>
