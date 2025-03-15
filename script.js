@@ -111,6 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
             themeColor.setAttribute("name", "theme-color");
             document.head.appendChild(themeColor);
         }
-        themeColor.setAttribute("content", "#000d27");
+        themeColor.setAttribute("content", "red");
     }
 });
