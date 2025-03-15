@@ -5,15 +5,6 @@ body {
     box-sizing: border-box;
 }
 
-body.dark-mode {
-    background-color: black;
-    color: white;
-}
-
-.dark-mode button {
-    background-color: grey;
-}
-
 header {
     display: flex;
     justify-content: flex-start;
@@ -155,6 +146,48 @@ h2 {
 
 
 /* ================
+       Darkmode
+   ================ */
+   
+body.dark-mode {
+    background-color: #000d27; /* #070f1b #121212 #070f1A */
+    color: white;
+}
+
+header button {
+    background-color: white;
+    border: none;
+}
+
+.dark-mode header button {
+    background-color: #000d27; 
+}
+
+.dark-mode .main-nav a::after {
+    background-color: white;
+}
+
+.dark-mode * {
+    color: white !important;
+}
+
+.dark-mode .springe-zu {
+    border-left: 1px dashed white;
+    border-bottom: 1px dashed white;
+    border-top: 1px dashed white;
+    background-image: url('/bilder/springe-zu-bg.png') !important;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dark-mode #scrollToTopBtn {
+    border: 1px dashed #2e66b9;
+    background-color: #ffffffbd;
+}
+
+  
+/* ================
     Passwort-Form
    ================ */
 
@@ -247,6 +280,10 @@ h2 {
     border-radius: 5px;
     position: relative;
     transition: transform 0.4s ease-out;
+}
+
+.dark-mode main-nav a {
+    color: #ffffff !important;
 }
 
 .main-nav a:hover::after {
