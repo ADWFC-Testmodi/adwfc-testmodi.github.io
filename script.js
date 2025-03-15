@@ -81,12 +81,36 @@ function hideCookieBanner() {
     }, 1000);
 }
 
+//Darkmode
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+    
+    // Dark Mode aktiv?
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    localStorage.setItem("darkMode", isDarkMode);
+
+    // Meta-Tag für die Browserfarbe anpassen
+    let themeColor = document.querySelector('meta[name="theme-color"]');
+    if (!themeColor) {
+        themeColor = document.createElement('meta');
+        themeColor.setAttribute("name", "theme-color");
+        document.head.appendChild(themeColor);
+    }
+    themeColor.setAttribute("content", isDarkMode ? "#121212" : "#ffffff");
 }
 
-// Dark Mode beim Laden prüfen
-//if (localStorage.getItem("darkMode") === "true") {
-  //  document.body.classList.add("dark-mode");
-//}
+// Dark Mode beim Laden der Seite setzen
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+
+        // Theme-Color setzen
+        let themeColor = document.querySelector('meta[name="theme-color"]');
+        if (!themeColor) {
+            themeColor = document.createElement('meta');
+            themeColor.setAttribute("name", "theme-color");
+            document.head.appendChild(themeColor);
+        }
+        themeColor.setAttribute("content", "#000d27");
+    }
+});
