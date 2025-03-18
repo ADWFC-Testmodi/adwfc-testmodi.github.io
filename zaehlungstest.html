@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstimmung</title>
+
+    <!-- Firebase SDK (modular) -->
+    <script type="module">
+        // Importiere die notwendigen Firebase-Funktionen
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        // Firebase-Konfiguration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
+            authDomain: "auth-adfwc.firebaseapp.com",
+            projectId: "auth-adfwc",
+            storageBucket: "auth-adfwc.firebasestorage.app",
+            messagingSenderId: "221420792742",
+            appId: "1:221420792742:web:79fd13ccb6fa2d5d603d67"
+        };
+
+        // Firebase initialisieren
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // UI-Elemente
+        const jaButton = document.getElementById('ja');
+        const neinButton = document.getElementById('nein');
+        const jaBar = document.getElementById('ja-bar');
+        const neinBar = document.getElementById('nein-bar');
+        const status = document.getElementById('status');
+
+        // Ereignis-Listener für Abstimmungen
+        jaButton.addEventListener('click', () => {
+            updateVote('ja');
+        });
+        neinButton.addEventListener('click', () => {
+            updateVote('nein');
+        });
+
+        // Stimmen abrufen und anzeigen
+        async function fetchResults() {
+            const voteRef = doc(db, "abfrage", "abstimmung-impressum");
+            const docSnap = await getDoc(voteRef);
+
+            if (docSnap.exists()) {
+                const votes = docSnap.data();
+                const totalVotes = votes.ja + votes.nein;
+                const jaPercent = (votes.ja / totalVotes) * 100;
+                const neinPercent = (votes.nein / totalVotes) * 100;
+
+                jaBar.style.width = jaPercent + '%';
+                neinBar.style.width = neinPercent + '%';
+
+                status.innerHTML = `Ja: ${Math.round(jaPercent)}% | Nein: ${Math.round(neinPercent)}%`;
+            } else {
+                console.log("Dokument nicht gefunden");
+            }
+        }
+
+        // Stimme senden und die Felder aktualisieren
+        async function updateVote(choice) {
+            const voteRef = doc(db, 'abfrage', 'abstimmung-impressum');
+            try {
+                await updateDoc(voteRef, {
+                    [choice]: increment(1)  // Erhöhe den Wert um 1
+                });
+                // Ergebnisse nach dem Update abrufen
+                fetchResults();
+            } catch (error) {
+                console.error("Fehler beim Aktualisieren des Dokuments:", error);
+            }
+        }
+
+        // Ergebnisse beim Laden der Seite abrufen
+        fetchResults();
+    </script>
+</head>
+<body>
+    <h1>Abstimmung: Ja oder Nein?</h1>
+    <button id="ja">Ja</button>
+    <button id="nein">Nein</button>
+
+    <h2>Ergebnisse</h2>
+    <div id="chart" style="width: 100%; height: 300px; background-color: #f0f0f0; border-radius: 5px;">
+        <div id="ja-bar" style="height: 100%; background-color: green; width: 0%;"></div>
+        <div id="nein-bar" style="height: 100%; background-color: red; width: 0%;"></div>
+    </div>
+    <p id="status"></p>
+</body>
+</html>
