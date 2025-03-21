@@ -488,17 +488,17 @@ header button {
   touch-action: manipulation;
 }
 
-.#imp-ja:hover, #imp-nein:hover,
-.#imp-ja:active, #imp-nein:active {
+#imp-ja:hover, #imp-nein:hover,
+#imp-ja:active, #imp-nein:active {
   outline: 0;
 }
 
-.#imp-ja:hover, #imp-nein:hover {
+#imp-ja:hover, #imp-nein:hover {
   background-color: transparent;
   cursor: pointer;
 }
 
-.#imp-ja:before, #imp-nein:before {
+#imp-ja:before, #imp-nein:before {
   background-color: #D5EDF6;
   content: "";
   height: calc(100% + 3px);
@@ -510,9 +510,30 @@ header button {
   z-index: -1;
 }
 
-.#imp-ja:hover:before, #imp-nein:hover:before {
+#imp-ja:hover:before, #imp-nein:hover:before {
   background-color: #6DCFF6;
 }
+
+  
+        #results { 
+            display: none; /* Alles auf einmal verstecken */
+        }
+        
+        #chart { 
+            width: 100%; 
+            height: 30px; 
+            background: lightgray; 
+            position: relative; 
+        }
+        
+        #ja-bar, #nein-bar { 
+            height: 100%; 
+            position: absolute; 
+            width: 0%; 
+        }
+        
+        #ja-bar { background: green; }
+        #nein-bar { background: red; right: 0; }
 
    
 /* ================
@@ -554,27 +575,6 @@ header button {
     .#imp-ja, #imp-nein {
     padding: 16px 32px;
   }
-  
-  
-        #results { 
-            display: none; /* Alles auf einmal verstecken */
-        }
-        
-        #chart { 
-            width: 100%; 
-            height: 30px; 
-            background: lightgray; 
-            position: relative; 
-        }
-        
-        #ja-bar, #nein-bar { 
-            height: 100%; 
-            position: absolute; 
-            width: 0%; 
-        }
-        
-        #ja-bar { background: green; }
-        #nein-bar { background: red; right: 0; }
 
 /*main*/
     main {
