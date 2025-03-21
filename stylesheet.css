@@ -471,6 +471,16 @@ header button {
 /* ================
         Impressum
    ================ */
+.dark-mode #imp-ja, .dark-mode #imp-nein {
+    background-color: transparent !important;
+    color: #D5EDF6 !important;
+    border: 1px solid #D5EDF6;
+}
+
+.dark-mode #imp-ja:before, .dark-mode #imp-nein:before {
+    background-color: #122c46 !important;
+}
+
 #imp-ja, #imp-nein {
   background-color: transparent;
   border: 1px solid #266DB6;
