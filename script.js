@@ -1,5 +1,3 @@
-// script.js
-
 const enablePasswordProtection = false; // true = aktiv, false = inaktiv
 const correctPasswordHash = "fe7c8b93142029fafe356ee9b2dd09766e6f266141c0c1340b262fc633c16e10";
 
@@ -10,12 +8,12 @@ function autoLogout() {
         document.getElementById('protectedContent').style.display = 'none';
         document.getElementById('passwordForm').style.display = 'block';
         alert("LOL - automatische Abmeldung nach 20min - Technikgott (auf keinen Fall aus'm Internet geklaut ;)");
-    }, 1200000); // 1200000 Millisekunden = 20 Minuten
+    }, 1200000);
 }
 
 // PW
 async function checkPassword() {
-    const enteredPassword = document.getElementById("passwordInput").value;
+    const enteredPassword = document.getElementById("passwordInput")?.value;
 
     const hashBuffer = await sha256(enteredPassword);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -25,7 +23,7 @@ async function checkPassword() {
         document.getElementById("passwordForm").style.display = "none";
         document.getElementById("protectedContent").style.display = "block";
         sessionStorage.setItem('loggedIn', 'true');
-        autoLogout(); 
+        autoLogout();
     } else {
         alert("LOL - frage doch den mächtigen Guru (V)");
     }
@@ -40,17 +38,17 @@ async function sha256(message) {
 }
 
 // Inhalte + Cookies
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", () => {
     if (!enablePasswordProtection) {
         document.getElementById('protectedContent').style.display = 'block';
         document.getElementById('passwordForm').style.display = 'none';
     } else {
         if (sessionStorage.getItem('loggedIn') === 'true') {
-            document.getElementById('protectedContent').style.display = 'block'; 
-            document.getElementById('passwordForm').style.display = 'none'; 
+            document.getElementById('protectedContent').style.display = 'block';
+            document.getElementById('passwordForm').style.display = 'none';
             autoLogout();
         } else {
-            document.getElementById('passwordForm').style.display = 'block'; 
+            document.getElementById('passwordForm').style.display = 'block';
             document.getElementById('protectedContent').style.display = 'none';
         }
     }
@@ -60,17 +58,17 @@ window.onload = function() {
     if (cookieBannerClosed === 'true') {
         document.getElementById("cookieBanner").style.display = "none";
     } else {
-        setTimeout(hideCookieBanner, 30000); // 30 Sek
+        setTimeout(hideCookieBanner, 30000);
     }
 
-    // Enter-Taste
-    document.getElementById("passwordInput").addEventListener("keydown", function(event) {
+    document.getElementById("passwordInput")?.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            checkPassword(); 
+            checkPassword();
         }
     });
-};
 
+    fetchResults();
+});
 
 // manuelles Schließen Cookies
 function hideCookieBanner() {
@@ -81,15 +79,13 @@ function hideCookieBanner() {
     }, 1000);
 }
 
-//Darkmode
+// Darkmode
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
-    
-    // Dark Mode aktiv?
+
     const isDarkMode = document.body.classList.contains("dark-mode");
     localStorage.setItem("darkMode", isDarkMode);
 
-    // Meta-Tag für die Browserfarbe anpassen
     let themeColor = document.querySelector('meta[name="theme-color"]');
     if (!themeColor) {
         themeColor = document.createElement('meta');
@@ -104,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
 
-        // Theme-Color setzen
         let themeColor = document.querySelector('meta[name="theme-color"]');
         if (!themeColor) {
             themeColor = document.createElement('meta');
@@ -113,4 +108,66 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         themeColor.setAttribute("content", "#070f1b");
     }
+});
+
+// Abstimmungssystem
+
+const API_URL = "https://api.jsonstorage.net/v1/json/cc0ffdd9-2174-49c8-b6d0-8cd42b2f79c5/eb0a6cf0-5f4c-4f6e-a090-d267f10c5e39";
+const API_KEY = "b6fd1da2-69cc-4768-a9ff-102b5b50db2e";
+
+function hasVoted() {
+    return localStorage.getItem("hasVoted") === "true";
+}
+
+async function fetchResults() {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    const totalVotes = data.ja + data.nein;
+
+    if (hasVoted()) {
+        document.getElementById("results").style.display = "block";
+    }
+
+    const jaPercent = (data.ja / totalVotes) * 100 || 0;
+    const neinPercent = (data.nein / totalVotes) * 100 || 0;
+
+    document.getElementById('ja-bar').style.width = jaPercent + "%";
+    document.getElementById('nein-bar').style.width = neinPercent + "%";
+    document.getElementById('status').innerText = `Ja: ${Math.round(jaPercent)}% | Nein: ${Math.round(neinPercent)}%`;
+
+    if (hasVoted()) {
+        disableButtons();
+    }
+}
+
+async function vote(choice) {
+    if (hasVoted()) {
+        alert("Du hast bereits abgestimmt!");
+        return;
+    }
+
+    const response = await fetch(API_URL);
+    let data = await response.json();
+    data[choice]++;
+
+    await fetch(`${API_URL}?apiKey=${API_KEY}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    localStorage.setItem("hasVoted", "true");
+    document.getElementById("results").style.display = "block";
+    fetchResults();
+}
+
+function disableButtons() {
+    document.getElementById("imp-ja").disabled = true;
+    document.getElementById("imp-nein").disabled = true;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetchResults();
+    document.getElementById("imp-ja").addEventListener("click", () => vote("ja"));
+    document.getElementById("imp-nein").addEventListener("click", () => vote("nein"));
 });
