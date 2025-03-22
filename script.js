@@ -144,20 +144,32 @@ async function fetchResults() {
 async function vote(choice) {
     console.log("Vote-Funktion wurde aufgerufen");
 
+    // Debugging: Prüfen, ob localStorage richtig gespeichert ist
+    console.log("hasVoted():", hasVoted());
+    console.log("LocalStorage Wert:", localStorage.getItem("hasVoted"));
+
     if (hasVoted()) {
         console.log("Fehlermeldung: Nutzer hat bereits abgestimmt!");
-        
-        // Zeigt eine visuelle Fehlermeldung im HTML an
-        document.getElementById("error").innerText = "Du hast bereits abgestimmt!";
-        document.getElementById("error").style.display = "block"; // Falls der Fehler-Container ausgeblendet ist
 
-        alert("Du hast bereits abgestimmt!"); // Falls Alerts blockiert sind, wird es trotzdem angezeigt
+        // Überprüfung, ob das HTML-Element existiert
+        const errorBox = document.getElementById("error");
+        if (!errorBox) {
+            console.error("FEHLER: HTML-Element mit id='error' nicht gefunden!");
+        } else {
+            console.log("Fehlermeldung wird gesetzt...");
+            errorBox.innerText = "Du hast bereits abgestimmt!";
+            errorBox.style.display = "block";
+        }
+
+        // Falls alert blockiert wird, einen kleinen Timeout setzen
+        setTimeout(() => alert("Du hast bereits abgestimmt!"), 100);
+
         return;
     }
 
     console.log("Abstimmung wird gezählt...");
 
-    // Setzt direkt den LocalStorage-Wert, um doppelte Klicks zu verhindern
+    // Setzt den LocalStorage-Wert direkt, um doppelte Klicks zu verhindern
     localStorage.setItem("hasVoted", "true");
 
     const response = await fetch(API_URL);
