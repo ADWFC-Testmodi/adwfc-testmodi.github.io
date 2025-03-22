@@ -95,7 +95,6 @@ function toggleDarkMode() {
     themeColor.setAttribute("content", isDarkMode ? "#121212" : "#ffffff");
 }
 
-// Dark Mode beim Laden der Seite setzen
 document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
@@ -110,8 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Abstimmungssystem
-
+// Abstimmungen
 const API_URL = "https://api.jsonstorage.net/v1/json/cc0ffdd9-2174-49c8-b6d0-8cd42b2f79c5/eb0a6cf0-5f4c-4f6e-a090-d267f10c5e39";
 const API_KEY = "b6fd1da2-69cc-4768-a9ff-102b5b50db2e";
 
@@ -146,6 +144,9 @@ async function vote(choice) {
         return;
     }
 
+    // Setze den lokalen Status direkt, bevor die API-Anfrage gesendet wird
+    localStorage.setItem("hasVoted", "true");
+
     const response = await fetch(API_URL);
     let data = await response.json();
     data[choice]++;
@@ -156,10 +157,10 @@ async function vote(choice) {
         body: JSON.stringify(data)
     });
 
-    localStorage.setItem("hasVoted", "true");
     document.getElementById("results").style.display = "block";
     fetchResults();
 }
+
 
 function disableButtons() {
     document.getElementById("imp-ja").disabled = true;
