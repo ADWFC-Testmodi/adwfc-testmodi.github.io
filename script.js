@@ -109,7 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Abstimmungen
+// Abstimmungssystem
+
 const API_URL = "https://api.jsonstorage.net/v1/json/cc0ffdd9-2174-49c8-b6d0-8cd42b2f79c5/eb0a6cf0-5f4c-4f6e-a090-d267f10c5e39";
 const API_KEY = "b6fd1da2-69cc-4768-a9ff-102b5b50db2e";
 
@@ -118,6 +119,8 @@ function hasVoted() {
 }
 
 async function fetchResults() {
+    console.log("Ergebnisse werden geladen...");
+
     const response = await fetch(API_URL);
     const data = await response.json();
     const totalVotes = data.ja + data.nein;
@@ -139,12 +142,22 @@ async function fetchResults() {
 }
 
 async function vote(choice) {
+    console.log("Vote-Funktion wurde aufgerufen");
+
     if (hasVoted()) {
-        alert("Du hast bereits abgestimmt!");
+        console.log("Fehlermeldung: Nutzer hat bereits abgestimmt!");
+        
+        // Zeigt eine visuelle Fehlermeldung im HTML an
+        document.getElementById("error").innerText = "Du hast bereits abgestimmt!";
+        document.getElementById("error").style.display = "block"; // Falls der Fehler-Container ausgeblendet ist
+
+        alert("Du hast bereits abgestimmt!"); // Falls Alerts blockiert sind, wird es trotzdem angezeigt
         return;
     }
 
-    // Setze den lokalen Status direkt, bevor die API-Anfrage gesendet wird
+    console.log("Abstimmung wird gezählt...");
+
+    // Setzt direkt den LocalStorage-Wert, um doppelte Klicks zu verhindern
     localStorage.setItem("hasVoted", "true");
 
     const response = await fetch(API_URL);
@@ -161,14 +174,16 @@ async function vote(choice) {
     fetchResults();
 }
 
-
 function disableButtons() {
+    console.log("Buttons werden deaktiviert...");
     document.getElementById("imp-ja").disabled = true;
     document.getElementById("imp-nein").disabled = true;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("Seite geladen, Event Listener werden gesetzt...");
     fetchResults();
+    
     document.getElementById("imp-ja").addEventListener("click", () => vote("ja"));
     document.getElementById("imp-nein").addEventListener("click", () => vote("nein"));
 });
