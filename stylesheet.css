@@ -12,6 +12,10 @@ header {
     width: 100%;
 }
 
+a {
+    color: #000;
+}
+
 ul {
     list-style-type: disc;
 }
@@ -496,6 +500,8 @@ header button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  margin-left: 20px;
+  margin-top: 20px;
 }
 
 #imp-ja:hover, #imp-nein:hover,
@@ -530,10 +536,11 @@ header button {
         }
         
         #chart { 
-            width: 100%; 
+            width: 300px;
             height: 30px; 
             background: lightgray; 
             position: relative; 
+            margin-top: 50px;
         }
         
         #ja-bar, #nein-bar { 
@@ -732,6 +739,10 @@ header button {
 
     #mitglieder, #kontakt {
         margin-top: 350px;
+    }
+    
+    #impressum {
+        margin-top: 250px;
     }
 
     .mitglieder-container {
