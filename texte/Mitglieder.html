@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>Alle Mitgliedertexte – ADWFC</title>
-  <meta name="author" content="Émile Jeremias Ruff">
-  <link rel="icon" type="image/png" href="favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
+
+  <title>ALLE TEXTE</title>
+<meta name="author" content="Émile Jeremias Ruff">
+<link rel="icon" type="image/png" href="favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
 </head>
 <body>
   <div class="mitglieder">
@@ -43,6 +44,7 @@
         const querySnapshot = await getDocs(collection(db, "users"));
         allTextsDiv.innerHTML = ""; // Leeren
 
+        // Durchlaufe alle Dokumente und zeige die Texte
         querySnapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const text = data.inhalt || "(Kein Inhalt)";
@@ -62,12 +64,18 @@
       }
     }
 
+    // Überprüfe den Authentifizierungsstatus
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Zeige den Bearbeitungslink nur für eingeloggt Benutzer
         document.getElementById("edit-link").style.display = "block";
+      } else {
+        // Falls der Benutzer nicht eingeloggt ist, kannst du auch eine Meldung einfügen
+        document.getElementById("edit-link").style.display = "none";
       }
     });
 
+    // Lade die Texte
     loadAllTexts();
   </script>
 </body>
