@@ -1,153 +1,68 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>ADWFC Login</title>
+  <title>Mitgliederbereich ADWFC</title>
   <meta name="author" content="Émile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
-
-  <style>
-    .login {
-      max-width: 400px;
-      margin: auto;
-      padding: 2em;
-      font-family: 'Lora', serif;
-    }
-    .login-eingabe {
-      margin-top: 1em;
-    }
-    input {
-      width: 100%;
-      padding: 0.5em;
-      margin-top: 0.5em;
-    }
-    button {
-      margin-top: 1em;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="login" autocomplete="off">
-    <h2>Login ADWFC</h2>
-    <p class="login-text">Hier kannst du dich in den geschützten Mitgliederbereich des ADWFC einloggen 🔐</p>
-    <br>
+  <div class="mitglieder">
+    <h2>Willkommen im Mitgliederbereich!</h2>
+    <p id="editable-text">Hier ist ein bearbeitbarer Text für Mitglieder. (Nur sichtbar, wenn du eingeloggt bist.)</p>
 
-    <div class="login-eingabe">
-      <div>
-        <label for="username">Benutzername:</label>
-        <input type="text" id="username" placeholder="hier fancy shit eintragen" required>
-      </div>
-
-      <div class="login-pw">
-        <label for="password">Passwort:</label>
-        <input type="password" id="password" placeholder="🗝️" required autocomplete="new-password">
-      </div>
-
-      <div>
-        <button id="redirect-button">Weiter zur internen Seite</button>
-        <button id="mitglieder-button">Nur Mitgliederbereich</button>
-        <button id="logout-button" style="display:none;">Logout</button>
-      </div>
-    </div>
+    <button id="edit-button">Text bearbeiten</button>
+    <button id="logout-button">Logout</button>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import {
-      getAuth, signInWithEmailAndPassword, signOut,
-      setPersistence, browserSessionPersistence, onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import {
-      getFirestore, doc, getDoc
-    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    // Firebase-Konfiguration
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
-      authDomain: "auth-adfwc.firebaseapp.com",
-      projectId: "auth-adfwc",
-      storageBucket: "auth-adfwc.firebasestorage.app",
-      messagingSenderId: "221420792742",
-      appId: "1:221420792742:web:f75515331cb4c5b4603d67"
-    };
+    const auth = getAuth();
+    const db = getFirestore();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const redirectButton = document.getElementById("redirect-button");
-    const mitgliederButton = document.getElementById("mitglieder-button");
-    const logoutButton = document.getElementById("logout-button");
-
-    async function loginUserAndGo(destination) {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const emailAsUsername = username + "@example.com"; // Dummy-Domain für Firebase
-
-      if (!username || !password) {
-        alert("Bitte gib Benutzername und Passwort ein.");
-        return;
-      }
-
-      try {
-        await setPersistence(auth, browserSessionPersistence); // Session only
-
-        const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
-        console.log("Login erfolgreich!");
-
-        if (destination === "redirect") {
-          const configRef = doc(db, "config", "global");
-          const configSnap = await getDoc(configRef);
-
-          if (configSnap.exists()) {
-            const globalRedirectUrl = configSnap.data().redirectUrl;
-            window.location.href = globalRedirectUrl;
-          } else {
-            alert("Fehler: Keine globale Weiterleitungs-URL gefunden!");
-          }
-        } else if (destination === "mitglieder") {
-          window.location.href = "texte/Mitglieder/";
-        }
-
-      } catch (error) {
-        alert("Fehler beim Login: " + error.message);
-      }
-    }
-
-    // Event-Listener für Login-Buttons
-    redirectButton.addEventListener("click", () => loginUserAndGo("redirect"));
-    mitgliederButton.addEventListener("click", () => loginUserAndGo("mitglieder"));
-
-    // Logout-Funktion
-    logoutButton.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        alert("Erfolgreich ausgeloggt.");
-        logoutButton.style.display = "none";
-      } catch (error) {
-        alert("Fehler beim Logout: " + error.message);
-      }
-    });
-
-    // Zeige Logout-Button nur, wenn eingeloggt
+    // Auth-Status prüfen, um den Benutzer zu erkennen
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        logoutButton.style.display = "inline-block";
+        console.log("Benutzer ist eingeloggt:", user);
+        document.getElementById("edit-button").style.display = "inline-block";
+        document.getElementById("logout-button").style.display = "inline-block";
       } else {
-        logoutButton.style.display = "none";
+        alert("Du musst dich einloggen, um den Mitgliederbereich zu sehen!");
+        window.location.href = "../auth.html"; // Zurück zum Login-Bereich
       }
     });
 
-    // Enter-Taste löst Login aus
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        loginUserAndGo("redirect");
+    // Text bearbeiten und speichern
+    document.getElementById("edit-button").addEventListener("click", () => {
+      const textElement = document.getElementById("editable-text");
+      const currentText = textElement.innerText;
+      const newText = prompt("Bearbeite den Text:", currentText);
+
+      if (newText !== null && newText !== currentText) {
+        textElement.innerText = newText;
+
+        // Text in Firestore speichern (kannst du nach Bedarf anpassen)
+        const textRef = doc(db, "texte", "Mitglieder");
+        updateDoc(textRef, { text: newText }).then(() => {
+          alert("Text erfolgreich gespeichert!");
+        }).catch((error) => {
+          console.error("Fehler beim Speichern:", error);
+          alert("Fehler beim Speichern des Textes.");
+        });
+      }
+    });
+
+    // Logout-Funktion
+    document.getElementById("logout-button").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        alert("Du hast dich erfolgreich abgemeldet.");
+        window.location.href = "../auth.html"; // Zurück zur Login-Seite
+      } catch (error) {
+        alert("Fehler beim Logout: " + error.message);
       }
     });
   </script>
