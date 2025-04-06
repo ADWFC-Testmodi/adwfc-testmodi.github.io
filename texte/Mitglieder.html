@@ -4,7 +4,7 @@
          <meta name="author" content="&Eacute;mile Jeremias Ruff">
          <link rel="icon" type="image/png" href="../favicon.ico">
 
-         <link rel="stylesheet" href="../stylesheet.css?v=<?= filemtime('style.css'); ?" type="text/css">
+         <link rel="stylesheet" href="../stylesheet.css" type="text/css">
          <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
          <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,11 +44,11 @@
           <!--h1 class="allgemeiner-deutscher">ADWFC &#x1F474; &#x1F97E;</h1-->
           <p class="internetauftritt">- Internetauftritt der<a href="../auth.html">WaFas</a></p>
           <ul>
-              <li><a href="../index.html">Homepage</a></li>
+              <li><a href="../index">Homepage</a></li>
               <li><b>|</b></li>
-              <li><a href="Mitglieder.html">Mitglieder</a></li>
+              <li><a href="Mitglieder">Mitglieder</a></li>
               <li><b>|</b></li>
-              <li><a href="Kontakt.html">Kontakt</a></li>
+              <li><a href="Kontakt">Kontakt</a></li>
           </ul>
       </div>
 
@@ -66,30 +66,36 @@
    <main>
         <h3 id="mitglieder">Mitglieder*</h3>          <!-- Mitglieder -->
 
-   <div class="mitglieder-container">     
+    <div class="mitglieder-container">     
         <table width="500" border="0" cellpadding="0" cellspacing="2">
-         <tr>    <td>&#x1F6B4; Jerry, "G&uuml;nther"</td>
+         <tr>    <td>&#x1F6B4;</td>
+                 <td>Jerry, "G&uuml;nther"</td>
                  <td>/ VM</td>
                  <td>/ GM</td>
                  <td>/ Legislative</td></tr>
          
-         <tr>    <td>&#x1F422; Maren &#x2764; ;), "Frank"</td>
+         <tr>    <td>&#x1F422;</td>
+                 <td>Yannick &#x2764; ;), "Frank"</td>
                  <td>/ GM</td>
                  <td>/ Legislative</td></tr>
         
-         <tr>    <td>&#x1FA93; [...] &#x2764; ;), "Sabine"</td>
+         <tr>    <td>&#x1FA93;</td>
+                 <td>Maren &#x2764; ;), "Sabine"</td>
                  <td>/ GM</td>
                  <td>/ Exekutive</td></tr>
          
-         <tr>    <td>&#x1F913; [...], "Paulus"</td>
+         <tr>    <td>&#x1F913;</td>
+                 <td>Patrik, "Paulus"</td>
                  <td>/ M</td>
                  <td>/ Judikative</td></tr>
         
-         <tr>    <td>&#x26F8; [...] , "Gertrude"</td>
+         <tr>    <td>&#x26F8;</td>
+                 <td>Béa, "Gertrude"</td>
                  <td>/ M</td>
                  <td>/ Judikative</td></tr>
         
-         <tr>    <td>&#x1F431; [...], "Gundula"</td>
+         <tr>    <td>&#x1F431;</td>
+                 <td>Mathilda, "Gundula"</td>
                  <td>/ M</td>
                  <td>/ Judikative</td></tr>
        
@@ -100,6 +106,8 @@
         <p><table>
             <tr><td>M</td>
                 <td>= &nbsp; Mitglied</td></tr>
+            <tr><td>M<sup>S</sup></td>
+                <td>= &nbsp; Seniormitglied</td></tr>
             <tr><td>VM</td>
                 <td>= &nbsp; Vorstandsmitglied</td></tr>
             <tr><td>GM</td>
@@ -112,17 +120,18 @@
     </div>
             
         <br>
-        <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index.html#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
+        <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
 
+    <footer>
+          <hr size="1" noshade>
+          <p class="impressum"><a href="Impressum">Impressum</a></p>
+    </footer>
+  
    </main>
-
-   <footer>
-         <hr size="1" noshade>
-         <p >&copy; 2025 by &Eacute;mile Jeremias Ruff</p>
-   </footer>
 
    </geschuetzt>
    <!--             Ende geschützter Inhalt           -->
 
 </body>
 </html>
+
