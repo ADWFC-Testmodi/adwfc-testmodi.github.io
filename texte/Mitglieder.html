@@ -53,7 +53,7 @@ async function loadAllTexts() {
       const userId = docSnap.id;
 
       const p = document.createElement("p");
-      p.innerHTML = `<strong>${userId}</strong>: ${text}`;
+      p.innerHTML = `${text}`;
       allTextsDiv.appendChild(p);
     });
 
