@@ -47,25 +47,28 @@
     const loginHinweis = document.getElementById("login-hinweis");
     const textarea = document.getElementById("editable-text");
 
+
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        editorSection.style.display = "block";
-        loginHinweis.style.display = "none";
+    const docRef = doc(db, "texte", "mitglieder");
+    const docSnap = await getDoc(docRef);
 
-        const docRef = doc(db, "texte", "mitglieder");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          textarea.value = docSnap.data().inhalt || "";
-        } else {
-          textarea.value = "";
-        }
+  if (docSnap.exists()) {
+    textarea.value = docSnap.data().inhalt || "";
+  } else {
+    textarea.value = "";
+  }
 
-      } else {
-        editorSection.style.display = "none";
-        loginHinweis.style.display = "block";
-      }
-    });
-
+  if (user) {
+    editorSection.style.display = "block";
+    loginHinweis.style.display = "none";
+    textarea.removeAttribute("readonly");
+  } else {
+    editorSection.style.display = "block";
+    loginHinweis.style.display = "block";
+    textarea.setAttribute("readonly", true);
+  }
+});
+    
     window.saveText = async () => {
       const inhalt = textarea.value;
       const docRef = doc(db, "texte", "mitglieder");
