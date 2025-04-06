@@ -2,34 +2,72 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Mitgliederbereich</title>
+  <title>ADWFC Login</title>
+  <meta name="author" content="Émile Jeremias Ruff">
+  <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
+
   <style>
-    textarea {
+    .login {
+      max-width: 400px;
+      margin: auto;
+      padding: 2em;
+      font-family: 'Lora', serif;
+    }
+    .login-eingabe {
+      margin-top: 1em;
+    }
+    input {
       width: 100%;
-      height: 200px;
+      padding: 0.5em;
+      margin-top: 0.5em;
+    }
+    button {
+      margin-top: 1em;
     }
   </style>
 </head>
+
 <body>
-  <h2>Mitgliederbereich</h2>
-
-  <div id="editor-section" style="display:none;">
-    <p>Bearbeite den Text:</p>
-    <textarea id="editable-text">Lade Text...</textarea>
+  <div class="login" autocomplete="off">
+    <h2>Login ADWFC</h2>
+    <p class="login-text">Hier kannst du dich in den geschützten Mitgliederbereich des ADWFC einloggen 🔐</p>
     <br>
-    <button onclick="saveText()">Speichern</button>
-  </div>
 
-  <div id="login-hinweis" style="display:none;">
-    <p>Bitte logge dich ein, um diesen Bereich zu bearbeiten.</p>
+    <div class="login-eingabe">
+      <div>
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" placeholder="hier fancy shit eintragen" required>
+      </div>
+
+      <div class="login-pw">
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" placeholder="🗝️" required autocomplete="new-password">
+      </div>
+
+      <div>
+        <button id="redirect-button">Weiter zur internen Seite</button>
+        <button id="mitglieder-button">Nur Mitgliederbereich</button>
+        <button id="logout-button" style="display:none;">Logout</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    import {
+      getAuth, signInWithEmailAndPassword, signOut,
+      setPersistence, browserSessionPersistence, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+    // Firebase-Konfiguration
     const firebaseConfig = {
       apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
       authDomain: "auth-adfwc.firebaseapp.com",
@@ -43,38 +81,75 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const editorSection = document.getElementById("editor-section");
-    const loginHinweis = document.getElementById("login-hinweis");
-    const textarea = document.getElementById("editable-text");
+    const redirectButton = document.getElementById("redirect-button");
+    const mitgliederButton = document.getElementById("mitglieder-button");
+    const logoutButton = document.getElementById("logout-button");
 
+    async function loginUserAndGo(destination) {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const emailAsUsername = username + "@example.com"; // Dummy-Domain für Firebase
 
-    onAuthStateChanged(auth, async (user) => {
-    const docRef = doc(db, "texte", "mitglieder");
-    const docSnap = await getDoc(docRef);
+      if (!username || !password) {
+        alert("Bitte gib Benutzername und Passwort ein.");
+        return;
+      }
 
-  if (docSnap.exists()) {
-    textarea.value = docSnap.data().inhalt || "";
-  } else {
-    textarea.value = "";
-  }
+      try {
+        await setPersistence(auth, browserSessionPersistence); // Session only
 
-  if (user) {
-    editorSection.style.display = "block";
-    loginHinweis.style.display = "none";
-    textarea.removeAttribute("readonly");
-  } else {
-    editorSection.style.display = "block";
-    loginHinweis.style.display = "block";
-    textarea.setAttribute("readonly", true);
-  }
-});
-    
-    window.saveText = async () => {
-      const inhalt = textarea.value;
-      const docRef = doc(db, "texte", "mitglieder");
-      await setDoc(docRef, { inhalt });
-      alert("Text gespeichert!");
-    };
+        const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
+        console.log("Login erfolgreich!");
+
+        if (destination === "redirect") {
+          const configRef = doc(db, "config", "global");
+          const configSnap = await getDoc(configRef);
+
+          if (configSnap.exists()) {
+            const globalRedirectUrl = configSnap.data().redirectUrl;
+            window.location.href = globalRedirectUrl;
+          } else {
+            alert("Fehler: Keine globale Weiterleitungs-URL gefunden!");
+          }
+        } else if (destination === "mitglieder") {
+          window.location.href = "texte/Mitglieder/";
+        }
+
+      } catch (error) {
+        alert("Fehler beim Login: " + error.message);
+      }
+    }
+
+    // Event-Listener für Login-Buttons
+    redirectButton.addEventListener("click", () => loginUserAndGo("redirect"));
+    mitgliederButton.addEventListener("click", () => loginUserAndGo("mitglieder"));
+
+    // Logout-Funktion
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        alert("Erfolgreich ausgeloggt.");
+        logoutButton.style.display = "none";
+      } catch (error) {
+        alert("Fehler beim Logout: " + error.message);
+      }
+    });
+
+    // Zeige Logout-Button nur, wenn eingeloggt
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        logoutButton.style.display = "inline-block";
+      } else {
+        logoutButton.style.display = "none";
+      }
+    });
+
+    // Enter-Taste löst Login aus
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        loginUserAndGo("redirect");
+      }
+    });
   </script>
 </body>
 </html>
