@@ -47,6 +47,10 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    document.getElementById("members-button").addEventListener("click", () => {
+    window.location.href = "texte/Mitglieder/index.html";
+    });
+    
     async function loginUserAndRedirect(username, password) {
       const emailAsUsername = username + "@example.com";
       try {
