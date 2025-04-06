@@ -24,6 +24,7 @@
         <button id="login-button">&#10004;</button>
       </div>
       <div style="margin-top: 10px;">
+        <!-- Button immer sichtbar! -->
         <button id="members-button">Zum Mitgliederbereich</button>
       </div>
     </div>
@@ -31,7 +32,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -47,22 +48,23 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Funktion, um den Benutzer anzumelden und weiterzuleiten
     async function loginUserAndRedirect(username, password) {
       const emailAsUsername = username + "@example.com";
       try {
+        // Stelle sicher, dass das Login über eine Session läuft
         await setPersistence(auth, browserSessionPersistence); // Session only
         const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
 
-        // Weiterleitung zur Bearbeitungsseite
+        // Wenn der Login erfolgreich ist, leite den Benutzer weiter
         window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
       } catch (error) {
-        console.error("Login Fehler:", error);
+        // Wenn Login fehlschlägt, zeige eine Fehlermeldung
         alert("Fehler beim Login: " + error.message);
       }
-        
     }
 
-    // Event Listener für den Login-Button
+    // Wenn der "Login"-Button gedrückt wird, führe den Login aus
     document.getElementById("login-button").addEventListener("click", () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -73,22 +75,14 @@
       }
     });
 
-    // Event Listener für den Mitgliederbereich-Button
+    // Wenn der "Mitgliederbereich"-Button gedrückt wird, leite weiter (dieser Button bleibt immer sichtbar)
     document.getElementById("members-button").addEventListener("click", () => {
-      const user = auth.currentUser;  // Überprüfen, ob der Benutzer eingeloggt ist
-      if (user) {
-        // Weiterleitung zur Mitgliederbereich-Seite, falls eingeloggt
-        window.location.href = "texte/Mitglieder/index.html";
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username && password) {
+        loginUserAndRedirect(username, password);
       } else {
-        alert("Du bist nicht eingeloggt. Bitte logge dich zuerst ein.");
-      }
-    });
-
-    // Überprüfen, ob ein Benutzer eingeloggt ist, und den Button entsprechend anzeigen
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Wenn der Benutzer eingeloggt ist, kann er den Mitgliederbereich betreten
-        document.getElementById("members-button").style.display = "none"; // Button ausblenden
+        alert("Bitte gib Benutzername und Passwort ein.");
       }
     });
   </script>
