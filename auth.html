@@ -31,7 +31,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -47,21 +47,20 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    document.getElementById("members-button").addEventListener("click", () => {
-    window.location.href = "texte/Mitglieder/index.html";
-    });
-    
     async function loginUserAndRedirect(username, password) {
       const emailAsUsername = username + "@example.com";
       try {
         await setPersistence(auth, browserSessionPersistence); // Session only
         const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
+
+        // Weiterleitung zur Bearbeitungsseite
         window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
       } catch (error) {
         alert("Fehler beim Login: " + error.message);
       }
     }
 
+    // Event Listener für den Login-Button
     document.getElementById("login-button").addEventListener("click", () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -69,6 +68,25 @@
         loginUserAndRedirect(username, password);
       } else {
         alert("Bitte gib Benutzername und Passwort ein.");
+      }
+    });
+
+    // Event Listener für den Mitgliederbereich-Button
+    document.getElementById("members-button").addEventListener("click", () => {
+      const user = auth.currentUser;  // Überprüfen, ob der Benutzer eingeloggt ist
+      if (user) {
+        // Weiterleitung zur Mitgliederbereich-Seite, falls eingeloggt
+        window.location.href = "texte/Mitglieder/index.html";
+      } else {
+        alert("Du bist nicht eingeloggt. Bitte logge dich zuerst ein.");
+      }
+    });
+
+    // Überprüfen, ob ein Benutzer eingeloggt ist, und den Button entsprechend anzeigen
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Wenn der Benutzer eingeloggt ist, kann er den Mitgliederbereich betreten
+        document.getElementById("members-button").style.display = "none"; // Button ausblenden
       }
     });
   </script>
