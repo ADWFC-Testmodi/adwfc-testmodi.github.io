@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Mitgliederbereich</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    textarea {
+      width: 100%;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Mitgliederbereich</h2>
+
+  <div id="editor-section" style="display:none;">
+    <p>Bearbeite den Text:</p>
+    <textarea id="editable-text">Lade Text...</textarea>
+    <br>
+    <button onclick="saveText()">Speichern</button>
+  </div>
+
+  <div id="login-hinweis" style="display:none;">
+    <p>Bitte logge dich ein, um diesen Bereich zu bearbeiten.</p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
+      authDomain: "auth-adfwc.firebaseapp.com",
+      projectId: "auth-adfwc",
+      storageBucket: "auth-adfwc.firebasestorage.app",
+      messagingSenderId: "221420792742",
+      appId: "1:221420792742:web:f75515331cb4c5b4603d67"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const editorSection = document.getElementById("editor-section");
+    const loginHinweis = document.getElementById("login-hinweis");
+    const textarea = document.getElementById("editable-text");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        editorSection.style.display = "block";
+        loginHinweis.style.display = "none";
+
+        const docRef = doc(db, "texte", "mitglieder");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          textarea.value = docSnap.data().inhalt || "";
+        } else {
+          textarea.value = "";
+        }
+
+      } else {
+        editorSection.style.display = "none";
+        loginHinweis.style.display = "block";
+      }
+    });
+
+    window.saveText = async () => {
+      const inhalt = textarea.value;
+      const docRef = doc(db, "texte", "mitglieder");
+      await setDoc(docRef, { inhalt });
+      alert("Text gespeichert!");
+    };
+  </script>
+</body>
+</html>
