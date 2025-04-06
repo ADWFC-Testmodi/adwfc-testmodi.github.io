@@ -39,31 +39,33 @@
 
     const allTextsDiv = document.getElementById("all-texts");
 
-    async function loadAllTexts() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        allTextsDiv.innerHTML = ""; // Leeren
+async function loadAllTexts() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    allTextsDiv.innerHTML = ""; // Leeren
 
-        // Durchlaufe alle Dokumente und zeige die Texte
-        querySnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          const text = data.inhalt || "(Kein Inhalt)";
-          const userId = docSnap.id;
+    // Durchlaufe alle Dokumente und zeige die Texte
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      console.log(data);  // Debugging, um zu sehen, wie das Dokument aussieht
 
-          const p = document.createElement("p");
-          p.innerHTML = `<strong>${userId}</strong>: ${text}`;
-          allTextsDiv.appendChild(p);
-        });
+      const text = data.inhalt || "(Kein Inhalt)";
+      const userId = docSnap.id;
 
-        if (allTextsDiv.innerHTML === "") {
-          allTextsDiv.innerText = "Keine Texte vorhanden.";
-        }
-      } catch (error) {
-        console.error("Fehler beim Laden aller Texte:", error);
-        allTextsDiv.innerText = "Fehler beim Laden der Texte.";
-      }
+      const p = document.createElement("p");
+      p.innerHTML = `<strong>${userId}</strong>: ${text}`;
+      allTextsDiv.appendChild(p);
+    });
+
+    if (allTextsDiv.innerHTML === "") {
+      allTextsDiv.innerText = "Keine Texte vorhanden.";
     }
-
+  } catch (error) {
+    console.error("Fehler beim Laden aller Texte:", error);
+    allTextsDiv.innerText = "Fehler beim Laden der Texte.";
+  }
+}
+    
     // Überprüfe den Authentifizierungsstatus
     onAuthStateChanged(auth, (user) => {
       if (user) {
