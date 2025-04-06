@@ -1,137 +1,71 @@
 <!DOCTYPE html>
+<html lang="de">
 <head>
-         <title>Mitglieder ADWFC</title>
-         <meta name="author" content="&Eacute;mile Jeremias Ruff">
-         <link rel="icon" type="image/png" href="../favicon.ico">
-
-         <link rel="stylesheet" href="../stylesheet.css" type="text/css">
-         <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
-         <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-         <script src="../script.js"></script>
-         <style>
-          #passwordForm, #protectedContent {
-                display: none;
-          }
-         </style>
+  <title>Mitgliederbereich ADWFC</title>
+  <meta name="author" content="Émile Jeremias Ruff">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
 </head>
-
 <body>
+  <div class="mitglieder">
+    <h2>Willkommen im Mitgliederbereich!</h2>
 
-    <!-- Passwortabfrage Formular -->
-    <div id="passwordForm">
-        <h2>Seite im Bau</h2>
-        <img src="../bilder/lego-construction.jpeg" class="lego-construction">
-        <p class="passwordForm-eins">Politische Ungeheuerlichkeiten, fatale Fehler im Code oder doch eher ein Beauty-Update? <br> In jedem Fall braucht es noch ein weinig Zeit,
-        in sp&auml;testens ein paar Tagen ist die Seite dann wieder erreichbar. <br> Wir bitten um Entschuldigung.</p>
-        <p class="passwordForm-zwei">Sonderinspektor auf Fahndung nach DIN EN ISO/IEC 27001 (Informationssicherheitsmanagementsysteme)? Dann sei krass und best&auml;tige mit deinem Parallel
-        Interconnection Nexus (PIN):</p>
-        <input type="number" id="passwordInput" placeholder="PIN" required>
-        <button class="h&auml;kchen" onclick="checkPassword()">&#10004;</button>
+    <!-- Textfeld, das immer angezeigt wird -->
+    <p id="editable-text">Lade Text...</p>
+
+    <!-- Weiterleitung zu Bearbeitungsseite, nur für eingeloggte Benutzer -->
+    <div id="edit-link" style="display: none;">
+      <p><a href="index.html">Text bearbeiten</a></p>
     </div>
+  </div>
 
-    <geschuetzt id="protectedContent">
-    <!--             Anfang geschützter Inhalt           -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+    // Firebase-Konfiguration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
+      authDomain: "auth-adfwc.firebaseapp.com",
+      projectId: "auth-adfwc",
+      storageBucket: "auth-adfwc.firebasestorage.app",
+      messagingSenderId: "221420792742",
+      appId: "1:221420792742:web:f75515331cb4c5b4603d67"
+    };
 
+    // Initialisierung
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-   <header class="header-container">                                                      <!-- main-nav -->
-<!----><button onclick="toggleDarkMode()"><img class="kopf" src="../bilder/Kopf.jpeg" alt="Kopf"></button>    
-       
-<!----><div class="main-nav">
-          <h1 class="allgemeiner-deutscher">Allgemeiner Deutscher Wanderer und Fahrradfahrer Club &#x1F474; &#x1F97E;</h1>
-          <!--h1 class="allgemeiner-deutscher">ADWFC &#x1F474; &#x1F97E;</h1-->
-          <p class="internetauftritt">- Internetauftritt der<a href="../auth.html">WaFas</a></p>
-          <ul>
-              <li><a href="../index">Homepage</a></li>
-              <li><b>|</b></li>
-              <li><a href="Mitglieder">Mitglieder</a></li>
-              <li><b>|</b></li>
-              <li><a href="Kontakt">Kontakt</a></li>
-          </ul>
-      </div>
+    // Text anzeigen
+    async function loadText(userId) {
+      const textRef = doc(db, "texte", userId, "mitglieder"); // Hier holen wir den Text des Benutzers
+      try {
+        const docSnap = await getDoc(textRef);
+        if (docSnap.exists()) {
+          const text = docSnap.data().inhalt || "Kein Text vorhanden";
+          document.getElementById("editable-text").innerText = text;
+        } else {
+          document.getElementById("editable-text").innerText = "Kein Text gefunden";
+        }
+      } catch (error) {
+        document.getElementById("editable-text").innerText = "Fehler beim Laden des Textes.";
+      }
+    }
 
-<!----><nav class="springe-zu">                                                             <!-- Springe zu -->
-          <ul class="springe-links">
-              <li>Springe zu:</li>
-              <li><a href="#Mitglieder">Mitglieder</a></li>
-          </ul>
-          <ul class="springe-rechts">
-          </ul>
-      </nav>
-   </header>
-
-
-   <main>
-        <h3 id="mitglieder">Mitglieder*</h3>          <!-- Mitglieder -->
-
-    <div class="mitglieder-container">     
-        <table width="500" border="0" cellpadding="0" cellspacing="2">
-         <tr>    <td>&#x1F6B4;</td>
-                 <td>Jerry, "G&uuml;nther"</td>
-                 <td>/ VM</td>
-                 <td>/ GM</td>
-                 <td>/ Legislative</td></tr>
-         
-         <tr>    <td>&#x1F422;</td>
-                 <td>Yannick &#x2764; ;), "Frank"</td>
-                 <td>/ GM</td>
-                 <td>/ Legislative</td></tr>
-        
-         <tr>    <td>&#x1FA93;</td>
-                 <td>Maren &#x2764; ;), "Sabine"</td>
-                 <td>/ GM</td>
-                 <td>/ Exekutive</td></tr>
-         
-         <tr>    <td>&#x1F913;</td>
-                 <td>Patrik, "Paulus"</td>
-                 <td>/ M</td>
-                 <td>/ Judikative</td></tr>
-        
-         <tr>    <td>&#x26F8;</td>
-                 <td>Béa, "Gertrude"</td>
-                 <td>/ M</td>
-                 <td>/ Judikative</td></tr>
-        
-         <tr>    <td>&#x1F431;</td>
-                 <td>Mathilda, "Gundula"</td>
-                 <td>/ M</td>
-                 <td>/ Judikative</td></tr>
-       
-        </table>
-
-        <div class="vertikale-linie"></div>
-
-        <p><table>
-            <tr><td>M</td>
-                <td>= &nbsp; Mitglied</td></tr>
-            <tr><td>M<sup>S</sup></td>
-                <td>= &nbsp; Seniormitglied</td></tr>
-            <tr><td>VM</td>
-                <td>= &nbsp; Vorstandsmitglied</td></tr>
-            <tr><td>GM</td>
-                <td>= &nbsp; Gr&uuml;ndungsmitglied</td></tr>
-            <tr><td>MaZ</td>
-                <td>= &nbsp; Mitglied auf Zeit</td></tr>
-            <tr><td>OtM</td>
-                <td>= &nbsp; One-time-Mitglied</td></tr>
-        </table></p>
-    </div>
-            
-        <br>
-        <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
-
-    <footer>
-          <hr size="1" noshade>
-          <p class="impressum"><a href="Impressum">Impressum</a></p>
-    </footer>
-  
-   </main>
-
-   </geschuetzt>
-   <!--             Ende geschützter Inhalt           -->
-
+    // Auth-Status prüfen, um den Bearbeiten-Link zu zeigen
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Wenn eingeloggt, Bearbeiten-Link anzeigen
+        document.getElementById("edit-link").style.display = "block";
+        loadText(user.uid); // Benutzer-spezifischen Text laden
+      } else {
+        loadText('global'); // Den globalen Text laden, wenn nicht eingeloggt
+      }
+    });
+  </script>
 </body>
 </html>
-
