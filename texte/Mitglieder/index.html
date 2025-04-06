@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>Mitgliederbereich ADWFC</title>
+  <title>Text bearbeiten - Mitgliederbereich ADWFC</title>
   <meta name="author" content="Émile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,15 @@
 </head>
 <body>
   <div class="mitglieder">
-    <h2>Willkommen im Mitgliederbereich!</h2>
+    <h2>Text bearbeiten</h2>
 
-    <!-- Textfeld, das immer angezeigt wird -->
-    <p id="editable-text">Lade Text...</p>
+    <!-- Textfeld, das bearbeitet werden kann -->
+    <textarea id="editable-text" rows="10" cols="50">Lade Text...</textarea>
 
-    <!-- Bearbeiten und Logout Button, nur für eingeloggte Benutzer -->
-    <button id="edit-button" style="display: none;">Text bearbeiten</button>
-    <button id="logout-button" style="display: none;">Logout</button>
+    <div>
+      <button id="save-button">Text speichern</button>
+      <button id="logout-button">Logout</button>
+    </div>
   </div>
 
   <script type="module">
@@ -40,60 +41,58 @@
     const db = getFirestore(app);
 
     const textElement = document.getElementById("editable-text");
-    const editButton = document.getElementById("edit-button");
+    const saveButton = document.getElementById("save-button");
     const logoutButton = document.getElementById("logout-button");
 
-    async function loadText() {
-      const textRef = doc(db, "texte", "mitglieder");
+    // Text laden
+    async function loadText(userId) {
+      const textRef = doc(db, "texte", userId, "mitglieder"); // Hier holen wir den Text des Benutzers
       try {
         const docSnap = await getDoc(textRef);
         if (docSnap.exists()) {
           const text = docSnap.data().inhalt || "Kein Text vorhanden";
-          textElement.innerText = text;
+          textElement.value = text;
         } else {
-          textElement.innerText = "Kein Text gefunden";
+          textElement.value = "Kein Text gefunden";
         }
       } catch (error) {
-        console.error("Fehler beim Laden des Textes:", error);
-        textElement.innerText = "Fehler beim Laden des Textes.";
+        textElement.value = "Fehler beim Laden des Textes.";
       }
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        editButton.style.display = "inline-block";
-        logoutButton.style.display = "inline-block";
+    // Bearbeiten und speichern
+    saveButton.addEventListener("click", async () => {
+      const newText = textElement.value;
+      const userId = auth.currentUser ? auth.currentUser.uid : 'global'; // Nutzer-ID ermitteln
+      const textRef = doc(db, "texte", userId, "mitglieder");
+
+      try {
+        await updateDoc(textRef, { inhalt: newText });
+        alert("Text erfolgreich gespeichert!");
+      } catch (error) {
+        alert("Fehler beim Speichern des Textes.");
       }
     });
 
-    editButton.addEventListener("click", async () => {
-      const currentText = textElement.innerText;
-      const newText = prompt("Bearbeite den Text:", currentText);
-
-      if (newText !== null && newText !== currentText) {
-        textElement.innerText = newText;
-        const textRef = doc(db, "texte", "mitglieder");
-        try {
-          await updateDoc(textRef, { inhalt: newText });
-          alert("Text erfolgreich gespeichert!");
-        } catch (error) {
-          console.error("Fehler beim Speichern:", error);
-          alert("Fehler beim Speichern des Textes.");
-        }
-      }
-    });
-
+    // Logout-Funktion
     logoutButton.addEventListener("click", async () => {
       try {
         await signOut(auth);
         alert("Du hast dich erfolgreich abgemeldet.");
-        window.location.href = "../auth.html";
+        window.location.href = "../auth.html"; // Zurück zur Login-Seite
       } catch (error) {
         alert("Fehler beim Logout: " + error.message);
       }
     });
 
-    loadText();
+    // Auth-Status prüfen
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "../auth.html";  // Falls nicht eingeloggt, zurück zur Login-Seite
+      } else {
+        loadText(user.uid); // Benutzer-spezifischen Text laden
+      }
+    });
   </script>
 </body>
 </html>
