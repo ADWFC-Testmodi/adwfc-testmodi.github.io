@@ -15,30 +15,35 @@
   
 </head>
 
-
 <body>
 
-  <div class ="login" autocomplete="off">
+  <div class="login" autocomplete="off">
 
-      <h2>Login ADWFC</h2>
+    <h2>Login ADWFC</h2>
 
-      <p class="login-text">Hier kannst du dich in den geschützten Mitgliederbereich des ADWFC einloggen 🔐</p>
-      <br>
-      
-      <div class="login-eingabe">
-          <div>
-            <label for="username">Benutzername:</label>
-            <input type="text" id="username" placeholder="hier fancy shit eintragen" required></div>
-      
-          <div class="login-pw">
-            <label for="password">Passwort:</label>
-            <input type="password" id="password" placeholder="🗝️" required autocomplete="new-password">
-            <button id="login-button">&#10004;</button></div>
+    <p class="login-text">Hier kannst du dich in den geschützten Mitgliederbereich des ADWFC einloggen 🔐</p>
+    <br>
 
+    <div class="login-eingabe">
+      <div>
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" placeholder="hier fancy shit eintragen" required>
       </div>
-  
+
+      <div class="login-pw">
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" placeholder="🗝️" required autocomplete="new-password">
+        <button id="login-button">&#10004;</button>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <button id="members-button">Zum Mitgliederbereich</button>
+      </div>
+
+    </div>
+
   </div>
-  
+
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -55,42 +60,51 @@
       appId: "1:221420792742:web:f75515331cb4c5b4603d67"
     };
 
-    // Firebase initialisieren
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Login-Funktion
-    async function loginUser(username, password) {
-      const emailAsUsername = username + "@example.com"; // Dummy-Domain für Firebase
-
+    async function loginUserAndRedirect(username, password) {
+      const emailAsUsername = username + "@example.com";
       try {
         const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
-        console.log("Login erfolgreich!");
-
-        // Globale Redirect-URL aus Firestore abrufen
         const configRef = doc(db, "config", "global");
         const configSnap = await getDoc(configRef);
 
         if (configSnap.exists()) {
           const globalRedirectUrl = configSnap.data().redirectUrl;
-          console.log("Globale Weiterleitung zu:", globalRedirectUrl);
           window.location.href = globalRedirectUrl;
         } else {
           alert("Fehler: Keine globale Weiterleitungs-URL gefunden!");
         }
-
       } catch (error) {
         alert("Fehler beim Login: " + error.message);
       }
     }
 
-    // EventListener für Login-Button
+    // Login mit Häkchen-Button
     document.getElementById("login-button").addEventListener("click", () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
       if (username && password) {
-        loginUser(username, password);
+        loginUserAndRedirect(username, password);
+      } else {
+        alert("Bitte gib Benutzername und Passwort ein.");
+      }
+    });
+
+    // Login und Weiterleitung zur Mitgliederseite
+    document.getElementById("members-button").addEventListener("click", async () => {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username && password) {
+        try {
+          const email = username + "@example.com";
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "texte/Mitglieder/index.html";
+        } catch (error) {
+          alert("Fehler beim Login: " + error.message);
+        }
       } else {
         alert("Bitte gib Benutzername und Passwort ein.");
       }
@@ -102,9 +116,7 @@
         document.getElementById("login-button").click();
       }
     });
-
   </script>
 
 </body>
 </html>
-
