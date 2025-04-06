@@ -1,56 +1,43 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-
   <title>ADWFC Login</title>
-  <meta name="author" content="&Eacute;mile Jeremias Ruff">
+  <meta name="author" content="Émile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
-
+  
   <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="script.js"></script>
   
+  <script src="script.js"></script>
 </head>
-
 <body>
-
   <div class="login" autocomplete="off">
-
     <h2>Login ADWFC</h2>
-
     <p class="login-text">Hier kannst du dich in den geschützten Mitgliederbereich des ADWFC einloggen 🔐</p>
     <br>
-
     <div class="login-eingabe">
       <div>
         <label for="username">Benutzername:</label>
         <input type="text" id="username" placeholder="hier fancy shit eintragen" required>
       </div>
-
       <div class="login-pw">
         <label for="password">Passwort:</label>
         <input type="password" id="password" placeholder="🗝️" required autocomplete="new-password">
         <button id="login-button">&#10004;</button>
       </div>
-
       <div style="margin-top: 10px;">
         <button id="members-button">Zum Mitgliederbereich</button>
       </div>
-
     </div>
-
   </div>
-
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    // Firebase-Konfiguration
     const firebaseConfig = {
       apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
       authDomain: "auth-adfwc.firebaseapp.com",
@@ -67,6 +54,7 @@
     async function loginUserAndRedirect(username, password) {
       const emailAsUsername = username + "@example.com";
       try {
+        await setPersistence(auth, browserSessionPersistence); // Session only
         const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
         const configRef = doc(db, "config", "global");
         const configSnap = await getDoc(configRef);
@@ -82,7 +70,6 @@
       }
     }
 
-    // Login mit Häkchen-Button
     document.getElementById("login-button").addEventListener("click", () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -101,7 +88,7 @@
         try {
           const email = username + "@example.com";
           await signInWithEmailAndPassword(auth, email, password);
-          window.location.href = "texte/Mitglieder/index.html";
+          window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
         } catch (error) {
           alert("Fehler beim Login: " + error.message);
         }
@@ -110,13 +97,11 @@
       }
     });
 
-    // Enter-Taste für Login
     document.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         document.getElementById("login-button").click();
       }
     });
   </script>
-
 </body>
 </html>
