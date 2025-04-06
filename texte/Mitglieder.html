@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>Mitgliederbereich ADWFC</title>
+  <title>Alle Mitgliedertexte – ADWFC</title>
   <meta name="author" content="Émile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +9,19 @@
 </head>
 <body>
   <div class="mitglieder">
-    <h2>Willkommen im Mitgliederbereich!</h2>
+    <h2>Texte aller Mitglieder</h2>
+    <div id="all-texts">Lade Texte...</div>
 
-    <!-- Textfeld, das immer angezeigt wird -->
-    <p id="editable-text">Lade Text...</p>
-
-    <!-- Weiterleitung zu Bearbeitungsseite, nur für eingeloggte Benutzer -->
+    <!-- Bearbeitungslink nur bei Login -->
     <div id="edit-link" style="display: none;">
-      <p><a href="index.html">Text bearbeiten</a></p>
+      <p><a href="index.html">Eigenen Text bearbeiten</a></p>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
@@ -38,30 +36,39 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Text anzeigen
-    async function loadText() {
-      const textRef = doc(db, "texte", "mitglieder"); // Hier holen wir den globalen Text
+    const allTextsDiv = document.getElementById("all-texts");
+
+    async function loadAllTexts() {
       try {
-        const docSnap = await getDoc(textRef);
-        if (docSnap.exists()) {
-          const text = docSnap.data().inhalt || "Kein Text vorhanden";
-          document.getElementById("editable-text").innerText = text;
-        } else {
-          document.getElementById("editable-text").innerText = "Kein Text gefunden";
+        const querySnapshot = await getDocs(collection(db, "users"));
+        allTextsDiv.innerHTML = ""; // Leeren
+
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const text = data.inhalt || "(Kein Inhalt)";
+          const userId = docSnap.id;
+
+          const p = document.createElement("p");
+          p.innerHTML = `<strong>${userId}</strong>: ${text}`;
+          allTextsDiv.appendChild(p);
+        });
+
+        if (allTextsDiv.innerHTML === "") {
+          allTextsDiv.innerText = "Keine Texte vorhanden.";
         }
       } catch (error) {
-        document.getElementById("editable-text").innerText = "Fehler beim Laden des Textes.";
+        console.error("Fehler beim Laden aller Texte:", error);
+        allTextsDiv.innerText = "Fehler beim Laden der Texte.";
       }
     }
 
-    // Auth-Status prüfen, um den Bearbeiten-Link zu zeigen
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Wenn eingeloggt, Bearbeiten-Link anzeigen
         document.getElementById("edit-link").style.display = "block";
       }
-      loadText(); // globalen Text anzeigen
     });
+
+    loadAllTexts();
   </script>
 </body>
 </html>
