@@ -4,12 +4,8 @@
   <title>ADWFC Login</title>
   <meta name="author" content="Émile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
-  
-  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
   <script src="script.js"></script>
 </head>
 <body>
@@ -56,15 +52,7 @@
       try {
         await setPersistence(auth, browserSessionPersistence); // Session only
         const userCredential = await signInWithEmailAndPassword(auth, emailAsUsername, password);
-        const configRef = doc(db, "config", "global");
-        const configSnap = await getDoc(configRef);
-
-        if (configSnap.exists()) {
-          const globalRedirectUrl = configSnap.data().redirectUrl;
-          window.location.href = globalRedirectUrl;
-        } else {
-          alert("Fehler: Keine globale Weiterleitungs-URL gefunden!");
-        }
+        window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
       } catch (error) {
         alert("Fehler beim Login: " + error.message);
       }
@@ -77,29 +65,6 @@
         loginUserAndRedirect(username, password);
       } else {
         alert("Bitte gib Benutzername und Passwort ein.");
-      }
-    });
-
-    // Login und Weiterleitung zur Mitgliederseite
-    document.getElementById("members-button").addEventListener("click", async () => {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      if (username && password) {
-        try {
-          const email = username + "@example.com";
-          await signInWithEmailAndPassword(auth, email, password);
-          window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
-        } catch (error) {
-          alert("Fehler beim Login: " + error.message);
-        }
-      } else {
-        alert("Bitte gib Benutzername und Passwort ein.");
-      }
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        document.getElementById("login-button").click();
       }
     });
   </script>
