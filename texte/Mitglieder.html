@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-
   <title>ALLE TEXTE</title>
-<meta name="author" content="Émile Jeremias Ruff">
-<link rel="icon" type="image/png" href="favicon.ico">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
+  <meta name="author" content="Émile Jeremias Ruff">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
 </head>
 <body>
   <div class="mitglieder">
     <h2>Texte aller Mitglieder</h2>
     <div id="all-texts">Lade Texte...</div>
 
-    <!-- Bearbeitungslink nur bei Login -->
     <div id="edit-link" style="display: none;">
       <p><a href="index.html">Eigenen Text bearbeiten</a></p>
     </div>
@@ -39,45 +37,37 @@
 
     const allTextsDiv = document.getElementById("all-texts");
 
-async function loadAllTexts() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    allTextsDiv.innerHTML = ""; // Leeren
+    async function loadAllTexts() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        allTextsDiv.innerHTML = ""; // Leeren
 
-    // Durchlaufe alle Dokumente und zeige die Texte
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      console.log(data);  // Debugging, um zu sehen, wie das Dokument aussieht
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const text = data.inhalt || "(Kein Inhalt)";
 
-      const text = data.inhalt || "(Kein Inhalt)";
-      const userId = docSnap.id;
+          const p = document.createElement("p");
+          p.innerHTML = `${text}`;
+          allTextsDiv.appendChild(p);
+        });
 
-      const p = document.createElement("p");
-      p.innerHTML = `${text}`;
-      allTextsDiv.appendChild(p);
-    });
-
-    if (allTextsDiv.innerHTML === "") {
-      allTextsDiv.innerText = "Keine Texte vorhanden.";
+        if (allTextsDiv.innerHTML === "") {
+          allTextsDiv.innerText = "Keine Texte vorhanden.";
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden aller Texte:", error);
+        allTextsDiv.innerText = "Fehler beim Laden der Texte.";
+      }
     }
-  } catch (error) {
-    console.error("Fehler beim Laden aller Texte:", error);
-    allTextsDiv.innerText = "Fehler beim Laden der Texte.";
-  }
-}
-    
-    // Überprüfe den Authentifizierungsstatus
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Zeige den Bearbeitungslink nur für eingeloggt Benutzer
         document.getElementById("edit-link").style.display = "block";
       } else {
-        // Falls der Benutzer nicht eingeloggt ist, kannst du auch eine Meldung einfügen
         document.getElementById("edit-link").style.display = "none";
       }
     });
 
-    // Lade die Texte
     loadAllTexts();
   </script>
 </body>
