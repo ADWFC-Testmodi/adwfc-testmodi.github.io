@@ -11,10 +11,10 @@
   <div class="mitglieder">
     <h2>Willkommen im Mitgliederbereich!</h2>
 
-    <!-- Textfeld, das immer angezeigt wird -->
+    <!-- Textfeld -->
     <p id="editable-text">Lade Text...</p>
 
-    <!-- Bearbeiten und Logout Button, nur für eingeloggte Benutzer -->
+    <!-- Buttons nur für eingeloggte Benutzer -->
     <button id="edit-button" style="display: none;">Text bearbeiten</button>
     <button id="logout-button" style="display: none;">Logout</button>
   </div>
@@ -24,7 +24,6 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    // Firebase-Konfiguration
     const firebaseConfig = {
       apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
       authDomain: "auth-adfwc.firebaseapp.com",
@@ -34,7 +33,6 @@
       appId: "1:221420792742:web:f75515331cb4c5b4603d67"
     };
 
-    // Initialisierung
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -43,10 +41,10 @@
     const editButton = document.getElementById("edit-button");
     const logoutButton = document.getElementById("logout-button");
 
-    async function loadText() {
-      const textRef = doc(db, "texte", "mitglieder");
+    async function loadText(userId) {
+      const userDocRef = doc(db, "users", userId);
       try {
-        const docSnap = await getDoc(textRef);
+        const docSnap = await getDoc(userDocRef);
         if (docSnap.exists()) {
           const text = docSnap.data().inhalt || "Kein Text vorhanden";
           textElement.innerText = text;
@@ -63,6 +61,9 @@
       if (user) {
         editButton.style.display = "inline-block";
         logoutButton.style.display = "inline-block";
+        loadText(user.uid);
+      } else {
+        textElement.innerText = "Du bist nicht eingeloggt.";
       }
     });
 
@@ -71,10 +72,10 @@
       const newText = prompt("Bearbeite den Text:", currentText);
 
       if (newText !== null && newText !== currentText) {
-        textElement.innerText = newText;
-        const textRef = doc(db, "texte", "mitglieder");
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
         try {
-          await updateDoc(textRef, { inhalt: newText });
+          await updateDoc(userDocRef, { inhalt: newText });
+          textElement.innerText = newText;
           alert("Text erfolgreich gespeichert!");
         } catch (error) {
           console.error("Fehler beim Speichern:", error);
@@ -92,8 +93,6 @@
         alert("Fehler beim Logout: " + error.message);
       }
     });
-
-    loadText();
   </script>
 </body>
 </html>
