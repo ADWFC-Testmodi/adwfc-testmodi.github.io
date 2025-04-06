@@ -20,6 +20,26 @@
   </div>
 
   <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+// Firebase-Konfiguration (wie in deiner auth.html)
+const firebaseConfig = {
+  apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
+  authDomain: "auth-adfwc.firebaseapp.com",
+  projectId: "auth-adfwc",
+  storageBucket: "auth-adfwc.firebasestorage.app",
+  messagingSenderId: "221420792742",
+  appId: "1:221420792742:web:f75515331cb4c5b4603d67"
+};
+
+// Initialisierung
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+    
+    
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
