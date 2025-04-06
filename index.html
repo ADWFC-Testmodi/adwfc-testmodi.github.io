@@ -4,11 +4,23 @@
          <meta name="author" content="&Eacute;mile Jeremias Ruff">
          <link rel="icon" type="image/png" href="favicon.ico">
 
-         <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
+         <link rel="stylesheet" href="stylesheet.css" type="text/css">
          <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
          <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
+         
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+         <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+         <meta http-equiv="Pragma" content="no-cache">
+         <meta http-equiv="Expires" content="0">
+        
+         <script>
+          let currentVersion = 'v2.1'; // Version ändern, wenn du Updates machst
+          if (localStorage.getItem('siteVersion') !== currentVersion) {
+          localStorage.setItem('siteVersion', currentVersion);
+          location.reload(true);
+          }
+         </script>
+        
          <script src="script.js"></script>
          <style>
           #passwordForm, #protectedContent {
@@ -23,7 +35,7 @@
     <div id="passwordForm">
         <h2>Seite im Bau</h2>
         <img src="bilder/lego-construction.jpeg" class="lego-construction">
-        <p class="passwordForm-eins">Politische Ungeheuerlichkeiten, fatale Fehler im Code oder doch eher ein Beauty-Update? <br> In jedem Fall braucht es noch ein weinig Zeit,
+        <p class="passwordForm-eins">Politische Ungeheuerlichkeiten, fatale Fehler im Code oder doch eher ein Beauty-Update? <br> In jedem Fall braucht es noch ein wenig Zeit,
                                      in sp&auml;testens ein paar Tagen ist die Seite dann wieder erreichbar. <br> Wir bitten um Entschuldigung.</p>
         <p class="passwordForm-zwei">Sonderinspektor auf Fahndung nach DIN EN ISO/IEC 27001 (Informationssicherheitsmanagementsysteme)? Dann sei krass und best&auml;tige mit deinem Parallel
                                      Interconnection Nexus (PIN):</p>
@@ -48,12 +60,12 @@
          
 <!----><div class="main-nav">
           <h1 class="allgemeiner-deutscher">Allgemeiner Deutscher Wanderer und Fahrradfahrer Club &#x1F474; &#x1F97E;</h1>
-          <p class="internetauftritt">- Internetauftritt der<a href="auth.html">WaFas</a></p>
-          <ul><li><a href="index.html">Homepage</a></li>
+          <p class="internetauftritt">- Internetauftritt der<a href="auth">WaFas</a></p>
+          <ul><li><a href="index">Homepage</a></li>
               <li><b>|</b></li>
-              <li><a href="texte/Mitglieder.html">Mitglieder</a></li>
+              <li><a href="texte/Mitglieder">Mitglieder</a></li>
               <li><b>|</b></li>
-              <li><a href="texte/Kontakt.html">Kontakt</a></li>
+              <li><a href="texte/Kontakt">Kontakt</a></li>
           </ul>
        </div>
 
@@ -91,7 +103,7 @@
                                        <li>Jeder hat das Recht, seine Meinung in Wort, Schrift und Bild frei zu &auml;u&szlig;ern und zu verbreiten und sich aus allgemein zug&auml;nglichen Quellen ungehindert zu unterrichten.</li>
                                        <li>Jeder das Recht, sich ohne Anmeldung oder Erlaubnis friedlich und ohne Waffen zu versammeln. Ausnahme bilden Taschenmesser, Streit- oder Wurft&auml;xte und Vodka-Flaschen.</li>
                                        <li>Politisch Verfolgte genie&szlig;en Asylrecht. Ausgenommen sind wegen-Verwendung-von-Backmischung-Verfolgte.</li>
-                                       <li>Jedermann hat ein Recht auf Privatsph&auml;re. Dieses wird einzig und allein durch ULALALA Aufzeichnungen von Franks Stimme eingeschr&auml;nkt, welche zugleich auch das gesamte <br>
+                                       <li>Jederman hat ein Recht auf Privatsph&auml;re. Dieses wird einzig und allein durch ULALALA Aufzeichnungen von Franks Stimme eingeschr&auml;nkt, welche zugleich auch das gesamte <br>
                                            Einkommen der Wanderer (und Fahrradfahrenden) bildet.</li></ul></li>
          <li>Menschen* nicht anfassen (au&szlig;er ihr habtn special Verh&auml;ltnis ;) find ich gut ;)</li>
          <li>Nicht von Menschen* angefasst werden</li>
@@ -106,7 +118,7 @@
          <li>Zensur erfolgt manchmal, wenn den Vorstandsmitgliedern danach ist.</li>
          <li>Die Freiheit der Berichterstattung durch Film wird gew&auml;hrleistet.</li>
          <li>Die Pressefreiheit wird nicht gew&auml;hrleistet, solange keine Presse ist.</li>
-         <li>Es gilt, das offizielles Maskottchen zu ehren und zu sch&uuml;tzen:</li>
+         <li>Es gilt, das offizielle Maskottchen zu ehren und zu sch&uuml;tzen:</li>
          <li>Der Einsatz von Backmischungen ist untersagt. Wird eine vorgefertigte Backmischung dennoch verwendet, so wird gem&auml;&szlig; Strafma&szlig; 2 geurteilt.</li></ol>
 
 
@@ -165,24 +177,24 @@
 
 
 <!---->  <p><b>&sect;2 Wir sagen "Nein!" zu Drogen</b><br>
-                 <span class="einzug">Auf Wanderungen (und Fahrradfahrten) sowie sonstigen Treffen im Rahmen der ADWFC ist von folgenden Drogen abzusehen: illegale Drogen, Cannabis, Tabak, <br>
+                 <span class="einzug">Auf Wanderungen (und Fahrradfahrten) sowie sonstigen Treffen im Rahmen der ADWFC ist vom Konsum folgenden Drogen abzusehen: illegale Drogen, Cannabis, Tabak, <br>
                  Doping und Alkohol. Wodka, Zucker und Bier sind von dieser Regelung ausgenommen. Bei Missachtung kann bis zu h&ouml;chster Strafma&szlig;nahme geurteilt werden;
                  dem dauerhaften Klubausschluss.</span></p>
 
 <!---->  <p><b>&sect;3 Neue Mitglieder</b><br>
                  <span>Zur Aufnahme m&uuml;ssen folgende Bedingungen erf&uuml;llt werden:<br>
                  <ul class="abstand-nm"><li>Interesse am Sport</li>
-                                        <li>eine zwischenmenschliche Beziehung zu mindestens einem der bestehenden GMs</li>
+                                        <li>eine zwischenmenschliche Beziehung zu mindestens einem bestehenden M<sup>S</sup></li>
                                         <li>Humor</li>
                                         <li>Lust daran, in der Natur zu sein</li>
-                                        <li>Antragsstellung eines GMs</li>
-                                        <li>einfache Mehrheit bei Aufnahmeantrag sowie die Kenntnis aller GMs des Antrages</li>
+                                        <li>Antragsstellung eines M<sup>S</sup></li>
+                                        <li>einfache Mehrheit bei Aufnahmeantrag sowie entweder die Kenntnis aller M<sup>S</sup>des Antrages oder den Verstreich von 72 Stunden</li>
                                         <li>Unterschreibung der Mitgliedervereinbarung</li>
                  </ul></span></p>
 
 <!----> <p><b>&sect;4 &Auml;nderungen klubrelevanter Texte</b><br>
                  <span class="einzug"> Zur &Auml;nderung im Klubnamen, den Regelungen und nachtr&auml;glich offiziellen Verlautbarungen ist eine einfache Mehrheit n&ouml;tig. Der Antrag muss <br>
-                 von einem GM gestellt werden.<br>
+                 von einem M<sup>S</sup> gestellt werden.<br>
                  Zur &Auml;nderung der Verfassung bedarf es einer Zweidrittelmehrheit. (siehe Erg&auml;. 2)<br>
                  Das &Auml;ndern selbst erfolgt unter Aufsicht mindestens eines VMs.</span></p>
 
@@ -213,7 +225,17 @@
                  <ul>     <li>Zur Bestimmung einer oder mehrerer Strafma&szlig;nahmen gegen ein WaFa muss in einem Ratszusammenschluss von min. drei Judikativen eine einfache Mehrheit gebildet werden.</li>
                           <li>Zur Exekutierung einer Strafma&szlig;nahme muss min. eine Judikative anwesend sein.</li>
                  </ul></p>
-
+                
+        <p><b>4. Seniormitglied (M<sup>S</sup>)</b>
+                 <ul>     <li>Wird ab einer Mitgliedschaft von drei Monaten verliehen.</li>
+                          <li>Muss in den ersten 72 Stunden Kenntnis von der Abstimmung zur Aufnahme neuer WaFas nehmen.</li>
+                          <li>Muss Anträge zur Änderung club-offizieller Schriften stellen.</li>
+                 </ul></p> 
+                
+        <p><b>5. Gründungsmitglied (GM)</b>
+                 <ul>     <li>Mitglieder der Gründung des Clubs</li>
+                          <li>Reiner Ehrentitel ohne besondere Rechte</li>
+                 </ul></p>               
 
 
         <h3 id="Strafma&szlig;nahmen">Strafma&szlig;nahmen (Sm)</h3>                        <!-- Strafmaßnahmen -->
@@ -253,7 +275,7 @@
 
                  <li><b>Orthografische &Auml;nderungen</b><br> Zur Korrektur orthografischer Fehler bedarf keines Antrages, nur der Zustimmung eines VMs. </li>
 
-                 <li><b>Ausgenommene Creatoren</b><br> ausgenommen sind folgende Creatoren: Kurzgesagt</li>
+                 <li><b>Ausgenommene Creatoren</b><br> ausgenommen sind folgende Creatoren: Kurzgesagt - In a nutshell</li>
         </ol>
 
 
@@ -261,12 +283,14 @@
 
         <h3 id="Zuk&uuml;nftiges">Zuk&uuml;nftiges</h3>                                     <!-- Zukünftiges -->
 
-        <p>(Instagram-Account?), eigene Memes, Maskottchen, Pr&auml;ambel, Flagge/Logo, Erkennungszeichen/-wortlaut/-handzeichen, Antrag an EU/Gurkistan, Abzeichen </p>
+        <p>(Instagram-Account?), eigene Memes, Maskottchen, Pr&auml;ambel, Flagge/Logo, Erkennungszeichen/-wortlaut/-handzeichen, Antrag an EU/Gurkistan, 
+           Abzeichen, Mitgliederstories, Entstehungsgeschichte, Ausgliederungsakte</p>
         <p>Medienempfehlung: <br> zum H&ouml;ren: Chaosradio (CCC), MDR Kultur (MDR), Fritz (rbb)</p>
+
 
    <footer>
          <hr size="1" noshade>
-         <p >&copy; 2025 by &Eacute;mile Jeremias Ruff</p>
+         <p class="impressum"><a href="texte/Impressum">Impressum</a></p>
    </footer>
 
    </main>
