@@ -56,8 +56,10 @@
         // Weiterleitung zur Bearbeitungsseite
         window.location.href = "texte/Mitglieder/index.html"; // Mitgliederbereich
       } catch (error) {
+        console.error("Login Fehler:", error);
         alert("Fehler beim Login: " + error.message);
       }
+        
     }
 
     // Event Listener für den Login-Button
