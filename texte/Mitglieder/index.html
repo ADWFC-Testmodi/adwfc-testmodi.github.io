@@ -10,10 +10,10 @@
 <body>
   <div class="mitglieder">
     <h2>Willkommen im Mitgliederbereich!</h2>
-    <p id="editable-text">Hier ist ein bearbeitbarer Text für Mitglieder. (Nur sichtbar, wenn du eingeloggt bist.)</p>
+    <p id="editable-text">Hier ist ein bearbeitbarer Text für Mitglieder. (Dieser Text ist auch ohne Login sichtbar, aber nur eingeloggte Mitglieder können ihn bearbeiten.)</p>
 
-    <button id="edit-button">Text bearbeiten</button>
-    <button id="logout-button">Logout</button>
+    <button id="edit-button" style="display: none;">Text bearbeiten</button>
+    <button id="logout-button" style="display: none;">Logout</button>
   </div>
 
   <script type="module">
@@ -23,15 +23,16 @@
     const auth = getAuth();
     const db = getFirestore();
 
-    // Auth-Status prüfen, um den Benutzer zu erkennen
+    // Text immer sichtbar, aber Editieren nur für eingeloggte Nutzer
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Wenn Nutzer eingeloggt, "Bearbeiten"-Button und Logout anzeigen
         console.log("Benutzer ist eingeloggt:", user);
         document.getElementById("edit-button").style.display = "inline-block";
         document.getElementById("logout-button").style.display = "inline-block";
       } else {
-        alert("Du musst dich einloggen, um den Mitgliederbereich zu sehen!");
-        window.location.href = "../auth.html"; // Zurück zum Login-Bereich
+        // Wenn nicht eingeloggt, nur Text anzeigen
+        console.log("Benutzer nicht eingeloggt");
       }
     });
 
@@ -44,7 +45,7 @@
       if (newText !== null && newText !== currentText) {
         textElement.innerText = newText;
 
-        // Text in Firestore speichern (kannst du nach Bedarf anpassen)
+        // Text in Firestore speichern
         const textRef = doc(db, "texte", "Mitglieder");
         updateDoc(textRef, { text: newText }).then(() => {
           alert("Text erfolgreich gespeichert!");
