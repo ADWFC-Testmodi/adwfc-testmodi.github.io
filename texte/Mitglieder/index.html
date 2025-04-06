@@ -14,104 +14,85 @@
     <!-- Textfeld, das immer angezeigt wird -->
     <p id="editable-text">Lade Text...</p>
 
-    <!-- Bearbeiten und Logout Button, die nur für eingeloggte Benutzer angezeigt werden -->
+    <!-- Bearbeiten und Logout Button, nur für eingeloggte Benutzer -->
     <button id="edit-button" style="display: none;">Text bearbeiten</button>
     <button id="logout-button" style="display: none;">Logout</button>
   </div>
 
   <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-
-// Firebase-Konfiguration (wie in deiner auth.html)
-const firebaseConfig = {
-  apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
-  authDomain: "auth-adfwc.firebaseapp.com",
-  projectId: "auth-adfwc",
-  storageBucket: "auth-adfwc.firebasestorage.app",
-  messagingSenderId: "221420792742",
-  appId: "1:221420792742:web:f75515331cb4c5b4603d67"
-};
-
-// Initialisierung
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-    
-    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    const auth = getAuth();
-    const db = getFirestore();
+    // Firebase-Konfiguration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
+      authDomain: "auth-adfwc.firebaseapp.com",
+      projectId: "auth-adfwc",
+      storageBucket: "auth-adfwc.firebasestorage.app",
+      messagingSenderId: "221420792742",
+      appId: "1:221420792742:web:f75515331cb4c5b4603d67"
+    };
 
-async function loadText() {
-  const textRef = doc(db, "texte", "mitglieder"); // Das Dokument, das den Text enthält
-  try {
-    const docSnap = await getDoc(textRef);
+    // Initialisierung
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     const textElement = document.getElementById("editable-text");
+    const editButton = document.getElementById("edit-button");
+    const logoutButton = document.getElementById("logout-button");
 
-    if (docSnap.exists()) {
-      const text = docSnap.data().inhalt || "Kein Text vorhanden";
-      console.log("Text geladen:", text); // Debugging: Text anzeigen
-      textElement.innerText = text;
-    } else {
-      console.log("Kein Text gefunden in Firestore");
-      textElement.innerText = "Kein Text gefunden";
+    async function loadText() {
+      const textRef = doc(db, "texte", "mitglieder");
+      try {
+        const docSnap = await getDoc(textRef);
+        if (docSnap.exists()) {
+          const text = docSnap.data().inhalt || "Kein Text vorhanden";
+          textElement.innerText = text;
+        } else {
+          textElement.innerText = "Kein Text gefunden";
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden des Textes:", error);
+        textElement.innerText = "Fehler beim Laden des Textes.";
+      }
     }
-  } catch (error) {
-    console.error("Fehler beim Abrufen des Textes:", error);
-    document.getElementById("editable-text").innerText = "Fehler beim Laden des Textes.";
-  }
-}
-    
 
-    // Text immer sichtbar, aber Editieren nur für eingeloggte Nutzer
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Wenn Nutzer eingeloggt, "Bearbeiten"-Button und Logout anzeigen
-        console.log("Benutzer ist eingeloggt:", user);
-        document.getElementById("edit-button").style.display = "inline-block";
-        document.getElementById("logout-button").style.display = "inline-block";
-      } else {
-        // Wenn nicht eingeloggt, nur Text anzeigen
-        console.log("Benutzer nicht eingeloggt");
+        editButton.style.display = "inline-block";
+        logoutButton.style.display = "inline-block";
       }
     });
 
-    // Text bearbeiten und speichern
-    document.getElementById("edit-button").addEventListener("click", () => {
-      const textElement = document.getElementById("editable-text");
+    editButton.addEventListener("click", async () => {
       const currentText = textElement.innerText;
       const newText = prompt("Bearbeite den Text:", currentText);
 
       if (newText !== null && newText !== currentText) {
         textElement.innerText = newText;
-
-        // Text in Firestore speichern
         const textRef = doc(db, "texte", "mitglieder");
-        updateDoc(textRef, { inhalt: newText }).then(() => {
+        try {
+          await updateDoc(textRef, { inhalt: newText });
           alert("Text erfolgreich gespeichert!");
-        }).catch((error) => {
+        } catch (error) {
           console.error("Fehler beim Speichern:", error);
           alert("Fehler beim Speichern des Textes.");
-        });
+        }
       }
     });
 
-    // Logout-Funktion
-    document.getElementById("logout-button").addEventListener("click", async () => {
+    logoutButton.addEventListener("click", async () => {
       try {
         await signOut(auth);
         alert("Du hast dich erfolgreich abgemeldet.");
-        window.location.href = "../auth.html"; // Zurück zur Login-Seite
+        window.location.href = "../auth.html";
       } catch (error) {
         alert("Fehler beim Logout: " + error.message);
       }
     });
 
-    // Initiale Textladung
     loadText();
   </script>
 </body>
