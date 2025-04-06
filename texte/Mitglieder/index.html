@@ -10,18 +10,36 @@
 <body>
   <div class="mitglieder">
     <h2>Willkommen im Mitgliederbereich!</h2>
-    <p id="editable-text">Hier ist ein bearbeitbarer Text für Mitglieder. (Dieser Text ist auch ohne Login sichtbar, aber nur eingeloggte Mitglieder können ihn bearbeiten.)</p>
 
+    <!-- Textfeld, das immer angezeigt wird -->
+    <p id="editable-text">Lade Text...</p>
+
+    <!-- Bearbeiten und Logout Button, die nur für eingeloggte Benutzer angezeigt werden -->
     <button id="edit-button" style="display: none;">Text bearbeiten</button>
     <button id="logout-button" style="display: none;">Logout</button>
   </div>
 
   <script type="module">
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const auth = getAuth();
     const db = getFirestore();
+
+    // Funktion zum Laden des Textes aus Firestore
+    async function loadText() {
+      const textRef = doc(db, "texte", "Mitglieder");
+      const docSnap = await getDoc(textRef);
+      const textElement = document.getElementById("editable-text");
+
+      if (docSnap.exists()) {
+        // Text aus der Datenbank laden und anzeigen
+        textElement.innerText = docSnap.data().text || "Kein Text vorhanden";
+      } else {
+        console.log("Kein Text gefunden");
+        textElement.innerText = "Kein Text gefunden";
+      }
+    }
 
     // Text immer sichtbar, aber Editieren nur für eingeloggte Nutzer
     onAuthStateChanged(auth, (user) => {
@@ -66,6 +84,9 @@
         alert("Fehler beim Logout: " + error.message);
       }
     });
+
+    // Initiale Textladung
+    loadText();
   </script>
 </body>
 </html>
