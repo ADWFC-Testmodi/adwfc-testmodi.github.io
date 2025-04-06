@@ -28,7 +28,7 @@
 
     // Funktion zum Laden des Textes aus Firestore
     async function loadText() {
-      const textRef = doc(db, "texte", "mitglieder"); // Dokument "mitglieder" in der Sammlung "texte"
+      const textRef = doc(db, "texte", "mitglieder", "inhalt"); // Dokument "mitglieder" in der Sammlung "texte"
       const docSnap = await getDoc(textRef);
       const textElement = document.getElementById("editable-text");
 
