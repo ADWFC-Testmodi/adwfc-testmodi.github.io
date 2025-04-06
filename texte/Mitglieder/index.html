@@ -28,13 +28,13 @@
 
     // Funktion zum Laden des Textes aus Firestore
     async function loadText() {
-      const textRef = doc(db, "texte", "Mitglieder");
+      const textRef = doc(db, "texte", "mitglieder"); // Dokument "mitglieder" in der Sammlung "texte"
       const docSnap = await getDoc(textRef);
       const textElement = document.getElementById("editable-text");
 
       if (docSnap.exists()) {
-        // Text aus der Datenbank laden und anzeigen
-        textElement.innerText = docSnap.data().text || "Kein Text vorhanden";
+        // Den Text aus dem Feld "inhalt" des Dokuments holen
+        textElement.innerText = docSnap.data().inhalt || "Kein Text vorhanden";
       } else {
         console.log("Kein Text gefunden");
         textElement.innerText = "Kein Text gefunden";
@@ -64,8 +64,8 @@
         textElement.innerText = newText;
 
         // Text in Firestore speichern
-        const textRef = doc(db, "texte", "Mitglieder");
-        updateDoc(textRef, { text: newText }).then(() => {
+        const textRef = doc(db, "texte", "mitglieder");
+        updateDoc(textRef, { inhalt: newText }).then(() => {
           alert("Text erfolgreich gespeichert!");
         }).catch((error) => {
           console.error("Fehler beim Speichern:", error);
