@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>ALLE TEXTE</title>
+  <meta charset="UTF-8">
+  <title>Alle Texte gezielt anzeigen</title>
   <meta name="author" content="Émile Jeremias Ruff">
-  <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
 </head>
 <body>
-  <div class="mitglieder">
-    <h2>Texte aller Mitglieder</h2>
-    <div id="all-texts">Lade Texte...</div>
+  <h2>Texte gezielt anzeigen</h2>
 
-    <div id="edit-link" style="display: none;">
-      <p><a href="index.html">Eigenen Text bearbeiten</a></p>
-    </div>
-  </div>
+  <!-- Hier kommen deine festen Divs -->
+  <div id="text-von-IWNaeTmoNabcr6Wl0qhWYZnR0mS2 "></div>
+  <div id="text-von-userid456"></div>
+  <div id="text-von-userid789"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -32,43 +29,26 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const allTextsDiv = document.getElementById("all-texts");
-
-    async function loadAllTexts() {
+    async function loadUserTexts() {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
-        allTextsDiv.innerHTML = ""; // Leeren
-
         querySnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          const text = data.inhalt || "(Kein Inhalt)";
+          const userId = docSnap.id;
+          const text = docSnap.data().inhalt || "(Kein Inhalt)";
 
-          const p = document.createElement("p");
-          p.innerHTML = `${text}`;
-          allTextsDiv.appendChild(p);
+          const targetDiv = document.getElementById(`text-von-${userId}`);
+          if (targetDiv) {
+            targetDiv.textContent = text;
+          }
         });
-
-        if (allTextsDiv.innerHTML === "") {
-          allTextsDiv.innerText = "Keine Texte vorhanden.";
-        }
       } catch (error) {
-        console.error("Fehler beim Laden aller Texte:", error);
-        allTextsDiv.innerText = "Fehler beim Laden der Texte.";
+        console.error("Fehler beim Laden der Texte:", error);
       }
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById("edit-link").style.display = "block";
-      } else {
-        document.getElementById("edit-link").style.display = "none";
-      }
-    });
-
-    loadAllTexts();
+    loadUserTexts();
   </script>
 </body>
 </html>
