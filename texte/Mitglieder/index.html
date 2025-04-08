@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>ALLE TEXTE</title>
-  <meta name="author" content="Émile Jeremias Ruff">
+  <title>Mitgliederbereich ADWFC</title>
+  <meta name="author" content="Ã‰mile Jeremias Ruff">
   <link rel="icon" type="image/png" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
 </head>
 <body>
   <div class="mitglieder">
-    <h2>Texte aller Mitglieder</h2>
-      <div id="Blr2F07cAPMhxusHRjBMmEbjolY2">Lade Text...</div>
-      <div id="text-von-IWNaeTmoNabcr6Wl0qhWYZnR0mS2">Lade Text...</div>
-    <!-- Weitere Divs hinzufügen, wenn mehr User kommen -->
+    <h2>Willkommen im Mitgliederbereich!</h2>
 
-    <div id="edit-link" style="display: none;">
-      <p><a href="index.html">Eigenen Text bearbeiten</a></p>
-    </div>
+    <!-- Textfeld -->
+    <p id="editable-text">Lade Text...</p>
+
+    <!-- Buttons nur fÃ¼r eingeloggte Benutzer -->
+    <button id="edit-button" style="display: none;">Text bearbeiten</button>
+    <button id="logout-button" style="display: none;">Logout</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA2foolYwDeoTrfkynuhJu44lb5qDXHFwg",
@@ -37,35 +37,62 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    async function loadAllTexts() {
+    const textElement = document.getElementById("editable-text");
+    const editButton = document.getElementById("edit-button");
+    const logoutButton = document.getElementById("logout-button");
+
+    async function loadText(userId) {
+      const userDocRef = doc(db, "users", userId);
       try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-    
-        querySnapshot.forEach((docSnap) => {
-          const userId = docSnap.id;
-          const data = docSnap.data();
-          const text = data.inhalt || "(Kein Inhalt)";
-    
-          const div = document.getElementById(`text-von-${userId}`);
-          if (div) {
-            div.innerHTML = text;
-          }
-        });
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          const text = docSnap.data().inhalt || "Kein Text vorhanden";
+          textElement.innerText = text;
+        } else {
+          textElement.innerText = "Kein Text gefunden";
+        }
       } catch (error) {
-        console.error("Fehler beim Laden aller Texte:", error);
+        console.error("Fehler beim Laden des Textes:", error);
+        textElement.innerText = "Fehler beim Laden des Textes.";
       }
     }
 
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById("edit-link").style.display = "block";
+        editButton.style.display = "inline-block";
+        logoutButton.style.display = "inline-block";
+        loadText(user.uid);
       } else {
-        document.getElementById("edit-link").style.display = "none";
+        textElement.innerText = "Du bist nicht eingeloggt.";
       }
     });
 
-    loadAllTexts();
+    editButton.addEventListener("click", async () => {
+      const currentText = textElement.innerText;
+      const newText = prompt("Bearbeite den Text:", currentText);
+
+      if (newText !== null && newText !== currentText) {
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        try {
+          await updateDoc(userDocRef, { inhalt: newText });
+          textElement.innerText = newText;
+          alert("Text erfolgreich gespeichert!");
+        } catch (error) {
+          console.error("Fehler beim Speichern:", error);
+          alert("Fehler beim Speichern des Textes.");
+        }
+      }
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        alert("Du hast dich erfolgreich abgemeldet.");
+        window.location.href = "../auth.html";
+      } catch (error) {
+        alert("Fehler beim Logout: " + error.message);
+      }
+    });
   </script>
 </body>
 </html>
