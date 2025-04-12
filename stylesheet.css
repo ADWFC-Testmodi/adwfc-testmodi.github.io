@@ -149,61 +149,7 @@ h2 {
         content: counter(list-counter) ". "; 
         font-weight: bold; 
     }
-/**/
-
-
-/* ================
-       Darkmode
-   ================ */
-body.dark-mode {
-    background-color: #070f1b; /* #070f1b #121212 #070f1A */
-    color: white;
-}
-
-header button {
-    background-color: white;
-    border: none;
-}
-
-.dark-mode header button {
-    background-color: #070f1b; 
-}
-
-.dark-mode .main-nav a::after {
-    background-color: white;
-}
-
-.dark-mode * {
-    color: white !important;
-}
-
-.dark-mode .springe-zu {
-    border-left: 1px dashed white;
-    border-bottom: 1px dashed white;
-    border-top: 1px dashed white;
-    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.dark-mode #scrollToTopBtn {
-    border: 1px dashed #2e66b9;
-    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.dark-mode #username, .dark-mode #password {
-    background-color: #070f1b !important;
-}
-
-.dark-mode #login-button {
-    color: green !important;
-    background-color: #070f1b !important;
-}
-
+    
 
 /* ================
     Passwort-Form
@@ -456,6 +402,7 @@ header button {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 30px;
 }
 
 #login-button {
@@ -465,12 +412,24 @@ header button {
     background-color: white;
 }
 
-.login-button:hover {
+#login-button:hover {
     color: white;
     background-color: green;
     border-radius: 45px;
 }
 
+.login-buttons {
+    display: flex; 
+    gap: 30px;
+}
+
+#login-button-2, #members-button {
+    font-size: 15px;
+    border: 0px solid black;  
+    font-style: italic; 
+    color: black;
+    background-color: white;
+}
 
 /* ================
       Impressum
@@ -768,4 +727,61 @@ header button {
 
 
     
+}
+
+/* ================
+       Darkmode
+   ================ */
+body.dark-mode {
+    background-color: #070f1b; /* #070f1b #121212 #070f1A */
+    color: white;
+}
+
+header button {
+    background-color: white;
+    border: none;
+}
+
+.dark-mode header button {
+    background-color: #070f1b; 
+}
+
+.dark-mode .main-nav a::after {
+    background-color: white;
+}
+
+.dark-mode * {
+    color: white !important;
+}
+
+.dark-mode .springe-zu {
+    border-left: 1px dashed white;
+    border-bottom: 1px dashed white;
+    border-top: 1px dashed white;
+    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dark-mode #scrollToTopBtn {
+    border: 1px dashed #2e66b9;
+    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dark-mode #username, .dark-mode #password {
+    background-color: #070f1b !important;
+}
+
+.dark-mode #login-button {
+    color: green !important;
+    background-color: #070f1b !important;
+}
+
+.dark-mode #login-button-2, #members-button {
+    color: white;
+    background-color: #070f1b;
 }
