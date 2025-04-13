@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <title>Mitgliederbereich ADWFC</title>
-  <meta name="author" content="Ã‰mile Jeremias Ruff">
-  <link rel="icon" type="image/png" href="favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css?v=<?= filemtime('style.css'); ?>" type="text/css">
+  <title>Mitgliederinfo bearbeiten</title>
+         <meta name="author" content="&Eacute;mile Jeremias Ruff">
+         <link rel="icon" type="image/png" href="../favicon.ico">
+
+         <link rel="stylesheet" href="../../stylesheet.css" type="text/css">
+         <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+         <link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+         <script src="../../script.js" defer></script>
+
+         <style>
+          #passwordForm, #protectedContent {
+                display: none;
+          }
+         </style>
 </head>
+
 <body>
-  <div class="mitglieder">
-    <h2>Willkommen im Mitgliederbereich!</h2>
+  <main>
 
-    <!-- Textfeld -->
-    <p id="editable-text">Lade Text...</p>
+      <div class="mitglieder">
+        <h4>&#60; Mitgliederinfo bearbeiten &#62;</h4>
+        <!----><img class="kopf" src="../../bilder/Kopf.jpeg" alt="Kopf">
 
-    <!-- Buttons nur fÃ¼r eingeloggte Benutzer -->
-    <button id="edit-button" style="display: none;">Text bearbeiten</button>
-    <button id="logout-button" style="display: none;">Logout</button>
-  </div>
+        <p>Folgend ist dein persönlicher Infotext zu bearbeiten. Dieser ist für <b>jeden</b> auf der Mitgliederseite <b>&#246;ffentlich einsehbar</b>. <br>
+           Entsprechende Hinweise zur Zurückhaltung von sensiblen Informationen ergeben sich also von selbst.</p>          
+        <p>Ideen zur Gestaltung dieser Seite nimmt der mächtige Guru (V) <span class="rainbow-text" onclick="throwConfetti(event)">mit Freuden</span> an (:</p>
+
+        <p id="editable-text">Lade Text...</p>
+
+        <button id="edit-button" style="display: none;"><u>Text bearbeiten</u> <img class="click-svg"></button>
+        <button id="logout-button" style="display: none;"><u>Logout</u> <img class="click-svg"></button>
+      </div>
+
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -46,14 +66,13 @@
       try {
         const docSnap = await getDoc(userDocRef);
         if (docSnap.exists()) {
-          const text = docSnap.data().inhalt || "Kein Text vorhanden";
+          const text = docSnap.data().inhalt || "Es wurde noch kein Text eingetragen.";
           textElement.innerText = text;
         } else {
-          textElement.innerText = "Kein Text gefunden";
+          textElement.innerText = "LOL - Frage doch den mächtigen Guru (V) - Fehler: Dok. nicht vorhanden";
         }
       } catch (error) {
-        console.error("Fehler beim Laden des Textes:", error);
-        textElement.innerText = "Fehler beim Laden des Textes.";
+        textElement.innerText = "LOL - Frage doch den mächtigen Guru (V) - Fehler: Laden des Textes";
       }
     }
 
@@ -63,7 +82,7 @@
         logoutButton.style.display = "inline-block";
         loadText(user.uid);
       } else {
-        textElement.innerText = "Du bist nicht eingeloggt.";
+        textElement.innerHTML = 'Du bist nicht eingeloggt. <a href="../../auth.html"><u>Zum Login</u></a>';
       }
     });
 
@@ -76,10 +95,10 @@
         try {
           await updateDoc(userDocRef, { inhalt: newText });
           textElement.innerText = newText;
-          alert("Text erfolgreich gespeichert!");
+          alert("Text erfolgreich gespeichert ✓");
         } catch (error) {
           console.error("Fehler beim Speichern:", error);
-          alert("Fehler beim Speichern des Textes.");
+          alert("LOL - Frage doch den mächtigen Guru (V) - Fehler: Speichern des Textes");
         }
       }
     });
@@ -87,10 +106,10 @@
     logoutButton.addEventListener("click", async () => {
       try {
         await signOut(auth);
-        alert("Du hast dich erfolgreich abgemeldet.");
-        window.location.href = "../auth.html";
+        alert("Erfolgreiche Abmeldung 🔒");
+        window.location.href = "../../auth.html";
       } catch (error) {
-        alert("Fehler beim Logout: " + error.message);
+        alert("LOL - Frage doch den mächtigen Guru (V) - Fehler beim Logout: " + error.message);
       }
     });
   </script>
