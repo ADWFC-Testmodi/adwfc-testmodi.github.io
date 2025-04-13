@@ -110,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Abstimmungssystem
-
 const API_URL = "https://api.jsonstorage.net/v1/json/cc0ffdd9-2174-49c8-b6d0-8cd42b2f79c5/eb0a6cf0-5f4c-4f6e-a090-d267f10c5e39";
 const API_KEY = "b6fd1da2-69cc-4768-a9ff-102b5b50db2e";
 
@@ -209,13 +208,28 @@ window.throwConfetti = function(e) {
 window.addEventListener('DOMContentLoaded', () => {
   const imgElements = document.querySelectorAll('.click-svg');
   const isDark = document.body.classList.contains('dark-mode');
-  const imagePath = isDark ? '../../bilder/click-dark.svg' : '../../bilder/click-bright.svg';
+  const imagePath = isDark ? '../b/click-dark.svg' : '../b/click-bright.svg';
 
   imgElements.forEach(img => {
     img.src = imagePath;
 
     if (!img.hasAttribute('alt')) {
       img.alt = 'Klick-Icon';
+    }
+  });
+});
+
+// extern-svg
+window.addEventListener('DOMContentLoaded', () => {
+  const imgElements = document.querySelectorAll('.extern-svg');
+  const isDark = document.body.classList.contains('dark-mode');
+  const imagePath = isDark ? '../b/extern-dark.svg' : '../b/extern-bright.svg';
+
+  imgElements.forEach(img => {
+    img.src = imagePath;
+
+    if (!img.hasAttribute('alt')) {
+      img.alt = 'Extern-Icon';
     }
   });
 });

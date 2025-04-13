@@ -32,13 +32,12 @@ main {
     display: none;
 }
 
-.click-svg {
+.click-svg, .extern-svg {
   width: 15px;
   height: auto;
   vertical-align: middle;
   display: inline-block;
 }
-
 
 .rainbow-text {
   background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
@@ -392,7 +391,7 @@ h4 {
     border-left: 1px dashed #11113A;
     border-bottom: 1px dashed #11113A;
     border-top: 1px dashed #11113A;
-    background-image: url('/bilder/bg_bright_springe-zu.png');
+    background-image: url('/b/bg_bright_springe-zu.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -834,8 +833,12 @@ h4 {
         margin-top: 0px;
     }
 
-    #mitglieder, #kontakt {
+    #mitglieder {
         margin-top: 350px;
+    }
+
+    #kontakt {
+        margin-top: 275px;
     }
     
     #impressum {
@@ -887,7 +890,7 @@ header button {
     border-left: 1px dashed white;
     border-bottom: 1px dashed white;
     border-top: 1px dashed white;
-    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
+    background-image: url('/b/bg_dark_springe-zu.png') !important;
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -895,7 +898,7 @@ header button {
 
 .dark-mode #scrollToTopBtn {
     border: 1px dashed #2e66b9;
-    background-image: url('/bilder/bg_dark_springe-zu.png') !important;
+    background-image: url('/b/bg_dark_springe-zu.png') !important;
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
