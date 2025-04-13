@@ -209,7 +209,7 @@ window.throwConfetti = function(e) {
 window.addEventListener('DOMContentLoaded', () => {
   const imgElements = document.querySelectorAll('.click-svg');
   const isDark = document.body.classList.contains('dark-mode');
-  const imagePath = isDark ? '../../bilder/click-dark.png' : '../../bilder/click-bright.png';
+  const imagePath = isDark ? '../../bilder/click-dark.svg' : '../../bilder/click-bright.svg';
 
   imgElements.forEach(img => {
     img.src = imagePath;
