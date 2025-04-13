@@ -205,28 +205,17 @@ window.throwConfetti = function(e) {
   });
 };
 
+// click-svg
 window.addEventListener('DOMContentLoaded', () => {
   const imgElements = document.querySelectorAll('.click-svg');
-  console.log(`🔍 ${imgElements.length} .click-svg-Bilder gefunden`);
-
   const isDark = document.body.classList.contains('dark-mode');
-  console.log(`🌗 Dark Mode aktiv: ${isDark}`);
+  const imagePath = isDark ? '../../bilder/click-dark.png' : '../../bilder/click-bright.png';
 
-  const imagePath = isDark ? '/bilder/click-dark.svg' : '/bilder/click-bright.svg';
+  imgElements.forEach(img => {
+    img.src = imagePath;
 
-  imgElements.forEach((img, i) => {
-    console.log(`📦 Setze Bild [${i}]: ${imagePath}`);
-
-    const testImage = new Image();
-    testImage.src = imagePath;
-
-    testImage.onload = () => {
-      img.src = imagePath;
-      console.log(`✅ Bild erfolgreich geladen für Element [${i}]`);
-    };
-
-    testImage.onerror = () => {
-      console.error(`❌ Fehler beim Laden des Bildes für Element [${i}]: ${imagePath}`);
-    };
+    if (!img.hasAttribute('alt')) {
+      img.alt = 'Klick-Icon';
+    }
   });
 });
