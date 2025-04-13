@@ -141,12 +141,34 @@
         <br>
         <p>*Weiteres zu den verschiedenen &Auml;mtern kann auf der Homepage unter "<a href="../index.html#Mitgliedertitel">Mitgliedertitel</a>" nachgelesen werden.</p>
 
-   </main>
-
    <footer>
          <hr size="1" noshade>
-         <p >&copy; 2025 by &Eacute;mile Jeremias Ruff</p>
+         <p class="impressum"><a href="texte/Impressum">Impressum</a></p>
    </footer>
+
+   </main>
+
+
+   <button id="scrollToTopBtn" title="Zur&uuml;ck nach oben">&#11014;</button>              <!-- Button -->
+   <script>
+        var mybutton = document.getElementById("scrollToTopBtn");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 700 || document.documentElement.scrollTop > 700) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        };
+
+        mybutton.onclick = function() {
+                 window.scrollTo({
+                     top: 0,
+                     behavior: 'smooth'
+                 });
+             }
+   </script>
+             
 
    </geschuetzt>
    <!--             Ende geschützter Inhalt           -->
