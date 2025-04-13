@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-         <title>Kontakt ADWFC</title>
+         <title>Mitglieder ADWFC</title>
          <meta name="author" content="&Eacute;mile Jeremias Ruff">
          <link rel="icon" type="image/png" href="../favicon.ico">
 
@@ -61,9 +61,10 @@
 <!----><nav class="springe-zu">                                                             <!-- Springe zu -->
           <ul class="springe-links">
               <li>Springe zu:</li>
-              <li><a href="#Mitglieder">Mitglieder</a></li>
+              <li><a href="#mitglieder">Mitglieder</a></li>
           </ul>
           <ul class="springe-rechts">
+              <li><a href="#m-titel">Titel</a></li>           
           </ul>
       </nav>
    </header>
@@ -71,10 +72,10 @@
 
 
    <main>
-   <h3 id="mitglieder">Mitglieder</h3>          <!-- Mitglieder -->
+   <h3 id="mitglieder">Mitglieder</h3>                                      <!-- Mitglieder -->
 
    <div class="mitglieder-container">     
-    <table width="350px" border="0" cellpadding="0" cellspacing="2">
+    <table class="m-table" border="0" cellpadding="0" cellspacing="2">
 
 
         <tr class="m-info" onclick="toggleDetails(this)">                    <!--Günther-->
@@ -82,7 +83,9 @@
                     <td>Jerry, "Günther"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="QGZc81CbpnXF1HZuVa1Nw2UzgBK2"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/VM /GM /L</td>
+                                                                            <td>&#x1F7E2;</td></table></div>
+                                        <div class="m-info" id="QGZc81CbpnXF1HZuVa1Nw2UzgBK2"></div></td></tr>
 
 
 
@@ -91,7 +94,10 @@
                     <td>Yannick &#x2764; ;), "Frank"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="QBH6Uh84hEQ6Ld8DVlg4WoMIgnJ2"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/GM /L</td>
+                                                                            <td>&#x1F535;</td></table></div>
+                                        <div class="m-info" id="QBH6Uh84hEQ6Ld8DVlg4WoMIgnJ2"></div></td></tr>
+
 
 
         <tr class="m-info" onclick="toggleDetails(this)">                    <!--Sabine-->
@@ -99,7 +105,10 @@
                     <td>Maren &#x2764; ;), "Sabine"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="MHXhKhlBtJQi3USJVQmOe1lAouo2"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/GM /E</td>
+                                                                            <td>&#x1F535;</td></table></div>
+                                        <div class="m-info" id="MHXhKhlBtJQi3USJVQmOe1lAouo2"></div></td></tr>
+
 
 
         <tr class="m-info" onclick="toggleDetails(this)">                    <!--Paulus-->
@@ -107,7 +116,10 @@
                     <td>Patrik, "Paulus"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="JKJQOmUxUANOQj8b8tGL7WAwSiq1"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/M /J</td>
+                                                                            <td>&#x1F7E2;</td></table></div>
+                                        <div class="m-info" id="JKJQOmUxUANOQj8b8tGL7WAwSiq1"></div></td></tr>
+
 
 
         <tr class="m-info" onclick="toggleDetails(this)">                    <!--Gertrude-->
@@ -115,23 +127,30 @@
                     <td>Béa, "Gertrude"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="MnrOHTN6jgUoovUjCscKkOW7wqa2"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/M /J</td>
+                                                                            <td>&#x1F7E2;</td></table></div>
+                                        <div class="m-info" id="MnrOHTN6jgUoovUjCscKkOW7wqa2"></div></td></tr>
 
  
+
         <tr class="m-info" onclick="toggleDetails(this)">                    <!--Gundula-->
                     <td>&#x1F431;</td>                                      
                     <td>Mathilda, "Gundula"</td></tr>
 
                     <tr class="m-info-row" style="display: none;">
-                        <td colspan="2"><div class="m-info" id="XZSXhf3KjEWqvQ7Oh9rZvt9MT5H3"></div></td></tr>
+                        <td colspan="2"><div class="m-grundinfo"><table><tr><td>/M /J</td>
+                                                                            <td>&#x1F7E2;</td></table></div>
+                                        <div class="m-info" id="XZSXhf3KjEWqvQ7Oh9rZvt9MT5H3"></div></td></tr>
 
     </table>
 
 
 
-        <div class="vertikale-linie"></div>
+    <h3>Legende</h3>
 
-        <p><table style="max-height: 150px;">
+    <div class="vertikale-linie"></div>
+
+        <p><table id="m-titel" style="max-height: 150px;">
             <tr><td>M</td>
                 <td>= &nbsp; Mitglied</td></tr>
             <tr><td>VM</td>
@@ -143,6 +162,43 @@
             <tr><td>OtM</td>
                 <td>= &nbsp; One-time-Mitglied</td></tr>
         </table></p>
+    </div>
+
+
+
+
+<!--    <div class="m-legende">
+    <p onclick="toggleLegende(this)">Mitgliedertitel <img class="toggle-svg" src="../b/toggle-up.svg" alt=""></p>
+        <table id="legende-row" style="display: none; max-height: 150px;">
+            <tr><td>M</td>
+                <td>= &nbsp; Mitglied</td></tr>
+            <tr><td>VM</td>
+                <td>= &nbsp; Vorstandsmitglied</td></tr>
+            <tr><td>GM</td>
+                <td>= &nbsp; Gr&uuml;ndungsmitglied</td></tr>
+            <tr><td>MaZ</td>
+                <td>= &nbsp; Mitglied auf Zeit</td></tr>
+            <tr><td>OtM</td>
+                <td>= &nbsp; One-time-Mitglied</td></tr>
+        </table>
+
+    <p onclick="legende">Demokratische Institutionen</p>
+
+    <p onclick="legende">Aktivität (Farben)</p>
+
+        <p><table id="m-titel" style="max-height: 150px;">
+            <tr><td>M</td>
+                <td>= &nbsp; Mitglied</td></tr>
+            <tr><td>VM</td>
+                <td>= &nbsp; Vorstandsmitglied</td></tr>
+            <tr><td>GM</td>
+                <td>= &nbsp; Gr&uuml;ndungsmitglied</td></tr>
+            <tr><td>MaZ</td>
+                <td>= &nbsp; Mitglied auf Zeit</td></tr>
+            <tr><td>OtM</td>
+                <td>= &nbsp; One-time-Mitglied</td></tr>
+        </table></p>
+    </div> -->
     </div>
 
         <br>
@@ -204,7 +260,7 @@
         const querySnapshot = await getDocs(collection(db, "users"));
         querySnapshot.forEach((docSnap) => {
           const userId = docSnap.id;
-          const text = docSnap.data().inhalt || "(Kein Inhalt)";
+          const text = docSnap.data().inhalt || "(Noch kein Inhalt)";
 
           const targetDiv = document.getElementById(`${userId}`);
           if (targetDiv) {
@@ -212,7 +268,7 @@
           }
         });
       } catch (error) {
-        console.error("Fehler beim Laden der Texte:", error);
+        console.error("LOL - Frage doch den mächtigen Guru (V) - Fehler: Laden der Texte:", error);
       }
     }
 
