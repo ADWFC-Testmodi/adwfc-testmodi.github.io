@@ -36,6 +36,7 @@ main {
   width: 15px;
   height: auto;
   vertical-align: middle;
+  display: inline-block;
 }
 
 
@@ -142,13 +143,6 @@ h2 {
 
 h4 {
     font-size: 25px;
-}
-
-.click-svg {
-    width: 15px;
-    height: auto;
-    vertical-align: middle;
-    display: inline-block;
 }
 
 .impressum {
