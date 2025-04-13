@@ -318,7 +318,7 @@ h4 {
     margin-left: 10px;
 }
 
-.main-nav a:not(.internetauftritt) {
+.main-nav a:not([href="auth"]) {
     color: #000;
     text-decoration: none;
     font-weight: bold;
