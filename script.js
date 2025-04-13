@@ -182,14 +182,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("imp-nein").addEventListener("click", () => vote("nein"));
 });
 
-// Mitgliedertexte ausklappen
-  function toggleDetails(row) {
-    const nextRow = row.nextElementSibling;
-    if (nextRow && nextRow.classList.contains('m-info-row')) {
-      const isVisible = nextRow.style.display === 'table-row';
-      nextRow.style.display = isVisible ? 'none' : 'table-row';
-    }
-  }
+// Legende
+document.addEventListener('DOMContentLoaded', () => {
+  const trigger = document.getElementById('trigger');
+  const vs1 = document.getElementById('vs1');
+  const img = document.getElementById('toggle-img');
+
+  trigger.addEventListener('click', () => {
+  const isHidden = window.getComputedStyle(vs1).display === 'none';
+
+  vs1.style.display = isHidden ? 'block' : 'none';
+  img.src = isHidden ? '../b/toggle-up.svg' : '../b/toggle-down.svg';
+});
+});
 
 // Konfetti
 window.throwConfetti = function(e) {
