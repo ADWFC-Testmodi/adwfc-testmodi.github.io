@@ -119,8 +119,6 @@ function hasVoted() {
 }
 
 async function fetchResults() {
-    console.log("Ergebnisse werden geladen...");
-
     const response = await fetch(API_URL);
     const data = await response.json();
     const totalVotes = data.ja + data.nein;
@@ -142,34 +140,21 @@ async function fetchResults() {
 }
 
 async function vote(choice) {
-    console.log("Vote-Funktion wurde aufgerufen");
-
-    // Debugging: Prüfen, ob localStorage richtig gespeichert ist
-    console.log("hasVoted():", hasVoted());
-    console.log("LocalStorage Wert:", localStorage.getItem("hasVoted"));
-
     if (hasVoted()) {
-        console.log("Fehlermeldung: Nutzer hat bereits abgestimmt!");
-
-        // Überprüfung, ob das HTML-Element existiert
         const errorBox = document.getElementById("error");
         if (!errorBox) {
-            console.error("FEHLER: HTML-Element mit id='error' nicht gefunden!");
         } else {
-            console.log("Fehlermeldung wird gesetzt...");
-            errorBox.innerText = "Du hast bereits abgestimmt!";
+            errorBox.innerText = "Bitte nur ein Vote pro User";
             errorBox.style.display = "block";
         }
 
-        // Falls alert blockiert wird, einen kleinen Timeout setzen
-        setTimeout(() => alert("Du hast bereits abgestimmt!"), 100);
+        setTimeout(() => alert("Bitte nur ein Vote pro User"), 100);
 
         return;
     }
 
-    console.log("Abstimmung wird gezählt...");
 
-    // Setzt den LocalStorage-Wert direkt, um doppelte Klicks zu verhindern
+    // Local-Storage
     localStorage.setItem("hasVoted", "true");
 
     const response = await fetch(API_URL);
@@ -187,15 +172,61 @@ async function vote(choice) {
 }
 
 function disableButtons() {
-    console.log("Buttons werden deaktiviert...");
     document.getElementById("imp-ja").disabled = true;
     document.getElementById("imp-nein").disabled = true;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Seite geladen, Event Listener werden gesetzt...");
     fetchResults();
     
     document.getElementById("imp-ja").addEventListener("click", () => vote("ja"));
     document.getElementById("imp-nein").addEventListener("click", () => vote("nein"));
+});
+
+// Mitgliedertexte ausklappen
+  function toggleDetails(row) {
+    const nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.classList.contains('m-info-row')) {
+      const isVisible = nextRow.style.display === 'table-row';
+      nextRow.style.display = isVisible ? 'none' : 'table-row';
+    }
+  }
+
+// Konfetti
+window.throwConfetti = function(e) {
+  const rect = e.target.getBoundingClientRect();
+  confetti({
+    particleCount: 100,
+    spread: 60,
+    origin: {
+      x: (rect.left + rect.width / 2) / window.innerWidth,
+      y: (rect.top + rect.height / 2) / window.innerHeight
+    }
+  });
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  const imgElements = document.querySelectorAll('.click-svg');
+  console.log(`🔍 ${imgElements.length} .click-svg-Bilder gefunden`);
+
+  const isDark = document.body.classList.contains('dark-mode');
+  console.log(`🌗 Dark Mode aktiv: ${isDark}`);
+
+  const imagePath = isDark ? '/bilder/click-dark.svg' : '/bilder/click-bright.svg';
+
+  imgElements.forEach((img, i) => {
+    console.log(`📦 Setze Bild [${i}]: ${imagePath}`);
+
+    const testImage = new Image();
+    testImage.src = imagePath;
+
+    testImage.onload = () => {
+      img.src = imagePath;
+      console.log(`✅ Bild erfolgreich geladen für Element [${i}]`);
+    };
+
+    testImage.onerror = () => {
+      console.error(`❌ Fehler beim Laden des Bildes für Element [${i}]: ${imagePath}`);
+    };
+  });
 });
