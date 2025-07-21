@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktiver Sternenhimmel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            cursor: grab;
+        }
+
+        body:active {
+            cursor: grabbing;
+        }
+
+        #sky {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            transition: transform 0.1s ease-out;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite alternate;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .star.visible {
+            opacity: 1;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+        }
+
+        .star.bright {
+            width: 4px;
+            height: 4px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .star.new {
+            animation: fadeIn 2s ease-out, twinkle 3s ease-in-out infinite alternate 2s;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .controls h3 {
+            margin-bottom: 10px;
+            color: #87ceeb;
+        }
+
+        .controls p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+
+        .zoom-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .constellation {
+            position: absolute;
+            opacity: 0.3;
+        }
+
+        .constellation-line {
+            stroke: rgba(135, 206, 235, 0.3);
+            stroke-width: 1;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>🌟 Sternenhimmel</h3>
+        <p>🖱️ Klicken & Ziehen zum Schwenken</p>
+        <p>🔍 Mausrad zum Zoomen</p>
+        <p>⭐ Neue Sterne beim Zoomen</p>
+    </div>
+
+    <div class="zoom-indicator">
+        Zoom: <span id="zoomLevel">100%</span>
+    </div>
+
+    <div id="sky"></div>
+
+    <script>
+        class Sternenhimmel {
+            constructor() {
+                this.sky = document.getElementById('sky');
+                this.stars = [];
+                this.zoom = 1;
+                this.panX = 0;
+                this.panY = 0;
+                this.isDragging = false;
+                this.lastMouseX = 0;
+                this.lastMouseY = 0;
+                this.starDensity = 200; // Anzahl der initialen Sterne
+                
+                this.init();
+            }
+
+            init() {
+                this.generateInitialStars();
+                this.addEventListeners();
+                this.updateTransform();
+                
+                // Sanfte Einblendung der Sterne
+                setTimeout(() => {
+                    this.stars.forEach((star, index) => {
+                        setTimeout(() => {
+                            star.element.classList.add('visible');
+                        }, index * 10);
+                    });
+                }, 500);
+            }
+
+            generateInitialStars() {
+                const width = window.innerWidth * 3; // Größerer Bereich für Panning
+                const height = window.innerHeight * 3;
+                
+                for (let i = 0; i < this.starDensity; i++) {
+                    this.createStar(width, height);
+                }
+            }
+
+            createStar(maxWidth = window.innerWidth * 3, maxHeight = window.innerHeight * 3) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Zufällige Position
+                const x = Math.random() * maxWidth - maxWidth / 2;
+                const y = Math.random() * maxHeight - maxHeight / 2;
+                
+                // Zufällige Sterngröße
+                const size = Math.random();
+                if (size < 0.6) {
+                    star.classList.add('small');
+                } else if (size < 0.85) {
+                    star.classList.add('medium');
+                } else if (size < 0.95) {
+                    star.classList.add('large');
+                } else {
+                    star.classList.add('bright');
+                }
+                
+                star.style.left = x + 'px';
+                star.style.top = y + 'px';
+                
+                // Zufällige Twinkle-Verzögerung
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                this.sky.appendChild(star);
+                
+                const starObj = {
+                    element: star,
+                    x: x,
+                    y: y,
+                    size: size
+                };
+                
+                this.stars.push(starObj);
+                return starObj;
+            }
+
+            addEventListeners() {
+                // Maus-Events für Panning
+                this.sky.addEventListener('mousedown', (e) => {
+                    this.isDragging = true;
+                    this.lastMouseX = e.clientX;
+                    this.lastMouseY = e.clientY;
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (this.isDragging) {
+                        const deltaX = e.clientX - this.lastMouseX;
+                        const deltaY = e.clientY - this.lastMouseY;
+                        
+                        this.panX += deltaX;
+                        this.panY += deltaY;
+                        
+                        this.updateTransform();
+                        
+                        this.lastMouseX = e.clientX;
+                        this.lastMouseY = e.clientY;
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    this.isDragging = false;
+                });
+
+                // Zoom mit Mausrad
+                this.sky.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    
+                    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+                    const newZoom = Math.max(0.5, Math.min(5, this.zoom * zoomFactor));
+                    
+                    if (newZoom !== this.zoom) {
+                        this.zoom = newZoom;
+                        this.updateTransform();
+                        this.updateZoomIndicator();
+                        
+                        // Neue Sterne beim Reinzoomen
+                        if (zoomFactor > 1) {
+                            this.addNewStars();
+                        }
+                    }
+                });
+
+                // Touch-Events für mobile Geräte
+                this.sky.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        this.isDragging = true;
+                        this.lastMouseX = e.touches[0].clientX;
+                        this.lastMouseY = e.touches[0].clientY;
+                    }
+                });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (this.isDragging && e.touches.length === 1) {
+                        e.preventDefault();
+                        const deltaX = e.touches[0].clientX - this.lastMouseX;
+                        const deltaY = e.touches[0].clientY - this.lastMouseY;
+                        
+                        this.panX += deltaX;
+                        this.panY += deltaY;
+                        
+                        this.updateTransform();
+                        
+                        this.lastMouseX = e.touches[0].clientX;
+                        this.lastMouseY = e.touches[0].clientY;
+                    }
+                });
+
+                document.addEventListener('touchend', () => {
+                    this.isDragging = false;
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.generateMoreStars();
+                });
+            }
+
+            updateTransform() {
+                this.sky.style.transform = `translate(${this.panX}px, ${this.panY}px) scale(${this.zoom})`;
+            }
+
+            updateZoomIndicator() {
+                document.getElementById('zoomLevel').textContent = Math.round(this.zoom * 100) + '%';
+            }
+
+            addNewStars() {
+                const newStarsCount = Math.floor(20 * this.zoom);
+                
+                for (let i = 0; i < newStarsCount; i++) {
+                    setTimeout(() => {
+                        const newStar = this.createStar();
+                        newStar.element.classList.add('new');
+                        
+                        // Sanfte Einblendung
+                        setTimeout(() => {
+                            newStar.element.classList.add('visible');
+                        }, 100);
+                    }, i * 50);
+                }
+            }
+
+            generateMoreStars() {
+                const currentStarCount = this.stars.length;
+                const targetStarCount = this.starDensity * (window.innerWidth * window.innerHeight) / (1920 * 1080);
+                
+                if (currentStarCount < targetStarCount) {
+                    for (let i = 0; i < targetStarCount - currentStarCount; i++) {
+                        setTimeout(() => {
+                            const newStar = this.createStar();
+                            newStar.element.classList.add('visible');
+                        }, i * 20);
+                    }
+                }
+            }
+
+            // Sanfte automatische Bewegung (optional)
+            startGentleMovement() {
+                setInterval(() => {
+                    if (!this.isDragging) {
+                        this.panX += Math.sin(Date.now() * 0.0001) * 0.5;
+                        this.panY += Math.cos(Date.now() * 0.00007) * 0.3;
+                        this.updateTransform();
+                    }
+                }, 50);
+            }
+        }
+
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', () => {
+            const sternenhimmel = new Sternenhimmel();
+            
+            // Optional: Sanfte automatische Bewegung aktivieren
+            // sternenhimmel.startGentleMovement();
+            
+            // Willkommensmeldung
+            setTimeout(() => {
+                console.log('🌟 Sternenhimmel geladen! Viel Spaß beim Erkunden des Universums!');
+            }, 1000);
+        });
+
+        // Zusätzliche sanfte Effekte
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            // Subtiler Parallax-Effekt
+            document.body.style.background = `radial-gradient(ellipse at ${mouseX * 100}% ${mouseY * 100}%, #1b2735 0%, #090a0f 100%)`;
+        });
+    </script>
+</body>
+</html>
