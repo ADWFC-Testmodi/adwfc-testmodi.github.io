@@ -130,21 +130,30 @@
       zeigeBild(index);
 
       if (raketeState === 'links') {
+        // Erste Animation: links nach rechts (Mitte) - keine Repositionierung
         rakete.style.transition = 'transform 1s ease';
         rakete.style.transform = 'translateX(70vw)';
         raketeState = 'mitte';
       } else if (raketeState === 'mitte') {
+        // Zweite Animation: rechts nach ganz außerhalb rechts
         rakete.style.transition = 'transform 1s ease';
         rakete.style.transform = 'translateX(120vw)';
-        raketeState = 'rechts';
-
+        
+        // Nach der Animation: Sprung nach außerhalb links und Animation zurück nach links
         setTimeout(() => {
+          // Transition ausschalten für den unsichtbaren Sprung
           rakete.style.transition = 'none';
           rakete.style.transform = 'translateX(-100px)';
-          void rakete.offsetWidth; // Trigger Reflow
-          rakete.style.transition = 'transform 1s ease';
-          rakete.style.transform = 'translateX(0)';
-          raketeState = 'links';
+          
+          // Browser zwingen, das Update zu verarbeiten
+          rakete.offsetHeight;
+          
+          // Transition wieder einschalten und zurück nach links animieren
+          setTimeout(() => {
+            rakete.style.transition = 'transform 1s ease';
+            rakete.style.transform = 'translateX(0)';
+            raketeState = 'links';
+          }, 50);
         }, 1000);
       }
     });
